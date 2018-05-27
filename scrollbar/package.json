@@ -1,8 +1,9 @@
 {
   "name": "mlmi-scrollbar",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Barre de défilement personnalisée pour projets web MLMI.",
-  "main": "index.js",
+  "main": "src/js/scrollbar.js",
+  "sass": "src/scss/scrollbar.scss",
   "author": "Mathieu Lajeunesse médias interactifs",
   "private": true,
   "devDependencies": {
