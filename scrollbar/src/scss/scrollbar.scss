@@ -1,0 +1,70 @@
+$scrollbar_width : 10px !default;
+$scrollbar_height : 100% !default;
+$scrollbar_background : transparent !default;
+$scrollbar_thumb_height : 25% !default;
+$scrollbar_thumb_min_height : 25% !default;
+$scrollbar_thumb_radius : 0 !default;
+$scrollbar_thumb_color : #000 !default;
+$scrollbar_thumb_opacity : 0.25 !default;
+$scrollbar_active_opacity : 1 !default;
+$scrollbar_transition_duration : 0.25s !default;
+
+.scroller
+{
+	overflow:auto;
+	max-height:100%;
+
+	&__container
+	{
+		box-sizing: border-box;
+		* { box-sizing: inherit; }
+		padding:0 !important;
+		overflow:hidden !important;
+		position:relative;
+	}
+
+	&__scrollbar
+	{
+		position:absolute;
+		top:0; right:0;
+		height:$scrollbar_height;
+		width:$scrollbar_width;
+		background:$scrollbar_background;
+
+		&__thumb {
+			position:absolute;
+			cursor:pointer;
+			user-select:none;
+			top:0; left:0;
+			width:100%;
+			height:$scrollbar_thumb_height;
+			min-height:$scrollbar_thumb_min_height;
+			opacity:$scrollbar_thumb_opacity;
+			transition:opacity $scrollbar_transition_duration ease;
+
+			&:after {
+				position:absolute;
+				display:block;
+				content:"";
+				top:0; left:0; right:0; bottom:0;
+				transition:all $scrollbar_transition_duration ease;
+				background:$scrollbar_thumb_color;
+				border-radius: $scrollbar_thumb_radius;
+			}
+		}
+
+		&--active .scroller__scrollbar {
+
+			&__thumb {
+				opacity:$scrollbar_active_opacity;
+			}
+
+		}
+
+		&:hover .scroller__scrollbar, &--dragging .scroller__scrollbar {
+			&__thumb {
+				opacity:$scrollbar_active_opacity;
+			}
+		}
+	}
+}

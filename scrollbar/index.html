@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="fr">
+<head>
+	<meta charset="utf-8">
+	<title>MLMI Scrollbar | Barre de défilement</title>
+	<meta name="description" content="Barre de défilement en SCSS et JavaScript">
+	<meta name="author" content="Mathieu Lajeunesse médias interactifs">
+	<link rel="stylesheet" href="dist/css/scrollbar.min.css">
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+	<script src="dist/js/scrollbar.min.js"></script>
+	<style>
+		html, body {
+			margin:0;
+			padding:0;
+		}
+		.container {
+			margin:1rem;
+			padding:1rem calc(1rem + 10px) 1rem 1rem;
+			border:1px solid #000;
+			width:33%;
+			height:50vh;
+			overflow:auto;
+			box-sizing:border-box;
+		}
+		.container p {
+			margin:0 0 1rem 0;
+			text-align:justify;
+			font-family:sans-serif;
+		}
+		img {
+			vertical-align:middle;
+			max-width:100%;
+			margin-bottom:1rem;
+		}
+		.container *:last-child {
+			margin:0;
+		}
+
+		@media screen and (min-width: 1280px)
+		{
+			html, body {
+				font-size:20px;
+				line-height:0.8;
+			}
+		}
+	</style>
+</head>
+<body>
+	<div class="container" id="scroller-example">
+		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent interdum nibh mauris, non bibendum dolor efficitur sit amet. Nulla aliquam a metus quis maximus. Sed id convallis odio. Maecenas non elit interdum, tincidunt eros ut, luctus tellus. Nulla vulputate facilisis varius. Praesent ultrices pretium ipsum, vel ultrices lorem maximus ac. Fusce suscipit sollicitudin justo, et laoreet est scelerisque et. Sed consectetur pulvinar sagittis. Aenean vel sapien sit amet ex condimentum mattis sit amet et lorem. In tristique diam nec ante volutpat tincidunt. Vestibulum eget libero quis turpis convallis condimentum vitae id metus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
+		<p>Maecenas et neque dolor. Phasellus ac massa luctus sem dignissim mollis vel id dolor. Donec viverra egestas sapien, ac tempor arcu laoreet ac. Mauris id dolor neque. Suspendisse potenti. Suspendisse non gravida lorem. Pellentesque sollicitudin hendrerit ante. Aenean facilisis vehicula tellus a porttitor. Vivamus nec neque arcu. Sed imperdiet pellentesque lorem at auctor. Cras ut ante sit amet metus vehicula facilisis. Mauris porttitor facilisis sem gravida faucibus. Suspendisse vitae quam lorem. Suspendisse consectetur ex eu faucibus malesuada.</p>
+		<img src="https://picsum.photos/400/300" alt="">
+		<p>Morbi posuere, ex nec varius consectetur, est dui laoreet ex, non ullamcorper dolor nulla sed nisl. Morbi et condimentum orci. Nunc a porta sem. Nulla ornare molestie nibh at rhoncus. Nulla ornare dolor quis nunc aliquam bibendum. Integer interdum malesuada dui, ac ullamcorper felis. Mauris vestibulum lobortis felis eu auctor. Quisque et lorem quam. Nam vel nulla eu mi commodo finibus vel sit amet nulla. Nam ornare erat eu augue dictum semper a tempus tellus. Donec a tellus non orci tempus pretium nec eu lorem. Nulla interdum risus nec ex imperdiet sodales.</p>
+		<p>Aenean sollicitudin, arcu ac fringilla iaculis, quam nulla sodales lectus, in pellentesque eros mi ac velit. Ut ac risus ipsum. Donec lobortis diam accumsan diam ultrices vestibulum sed id massa. In eleifend ante eu vestibulum egestas. Praesent placerat turpis sapien, id ultricies metus maximus ut. Donec convallis arcu vel elit molestie, eget pretium erat sodales. Integer a convallis lectus, quis molestie est. Vivamus sed sollicitudin est. Duis fringilla, nisi vitae accumsan tristique, lectus lorem fermentum leo, ut lacinia metus lectus at turpis. Etiam felis eros, consequat vel risus vel, dictum finibus velit. Suspendisse potenti. Praesent facilisis turpis at metus pharetra tincidunt.</p>
+		<p>Duis sagittis dui a libero scelerisque, nec laoreet nunc tempus. Etiam dictum placerat ligula, in dapibus velit sodales at. Ut et erat lorem. Pellentesque ornare, nulla interdum iaculis ultricies, lorem ligula aliquet lectus, vel egestas justo tellus vitae lectus. Sed tellus lorem, molestie sit amet dictum eget, faucibus in orci. Morbi bibendum mi augue, id mattis urna commodo eget. In pulvinar lacinia lectus, eget feugiat sem sagittis ac. Proin posuere, odio tincidunt gravida tempor, lacus odio tempus felis, non ultricies quam neque nec arcu. Aenean dictum nunc sit amet sagittis semper. Integer ut libero et neque pulvinar egestas. Suspendisse auctor elit leo, vel vehicula lectus pellentesque at. Quisque nec magna dictum, commodo urna et, porta elit.</p>
+	</div>
+
+	<script>
+		$("#scroller-example").MLMI_Scroller().addScrollbar();
+	</script>
+
+</body>
+</html>
