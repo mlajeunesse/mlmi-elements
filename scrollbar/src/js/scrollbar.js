@@ -189,6 +189,7 @@ $.fn.MLMI_Scroller = function(_options)
 		self.el.scroller.on("scroll", self.scrolled);
 		self.sizes();
 		self.scrolled();
+		return self;
 	};
 
 	self.setScrollPercentage = function(_scroll_percentage)
