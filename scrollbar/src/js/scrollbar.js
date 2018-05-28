@@ -216,8 +216,8 @@ $.fn.MLMI_Scroller = function(_options)
 		// create scroller html structure
 		self.el.scroller = $('<div></div>').BlockElement('scroller');
 		self.sizes();
-		self.el.scroller.append(self.html());
- 		self.html(self.el.scroller);
+		self.el.scroller.append(self.contents());
+ 		self.append(self.el.scroller);
 
 		// resize element
 		$(window).on("load resize orientationchange", function(){

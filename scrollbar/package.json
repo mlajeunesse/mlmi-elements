@@ -1,6 +1,6 @@
 {
   "name": "mlmi-scrollbar",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Barre de défilement personnalisée pour projets web MLMI.",
   "main": "./src/js/scrollbar.js",
   "sass": "./src/scss/scrollbar.scss",
