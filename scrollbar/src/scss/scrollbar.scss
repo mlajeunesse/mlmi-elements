@@ -12,6 +12,7 @@ $scrollbar_transition_duration : 0.25s !default;
 .scroller
 {
 	overflow:auto;
+	-webkit-overflow-scrolling: touch;
 	max-height:100%;
 
 	&__container

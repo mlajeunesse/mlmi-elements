@@ -202,8 +202,11 @@ $.fn.MLMI_Scroller = function(_options)
 		self.el.scroller.scrollTop((self.el.scroller.get(0).scrollHeight - self.el.scroller.outerHeight(false)) * _scroll_percentage);
 	};
 
-	self.scrolled = function()
+	self.scrolled = function(event)
 	{
+		if (event != undefined){
+			event.stopPropagation();
+		}
 		if (!self.el.scrollbar.status.dragging){
 			var targetPercentage = self.el.scroller.scrollTop() / (self.el.scroller.get(0).scrollHeight - self.el.scroller.outerHeight(false));
 			if (targetPercentage < 0) targetPercentage = 0;
