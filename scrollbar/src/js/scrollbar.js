@@ -147,7 +147,10 @@ $.fn.MLMI_Scroller = function(_options)
 		paddingBottom: 0,
 		paddingLeft: 0
 	};
-	self.resize_timeout = undefined;
+	self.status = {
+		is_scrollable: false,
+		timeout_resize: undefined
+	};
 
 	self.sizes = function()
 	{
@@ -175,9 +178,11 @@ $.fn.MLMI_Scroller = function(_options)
 		// check if scrollbar is needed
 		if (self.el.scrollbar != undefined){
 			if (self.el.scroller.get(0).scrollHeight > self.el.scroller.outerHeight(false)){
+				self.status.is_scrollable = true;
 				self.el.scrollbar.show();
 				self.el.scrollbar.setVisiblePercentage(self.el.scroller.outerHeight() / self.el.scroller.get(0).scrollHeight);
 			} else {
+				self.status.is_scrollable = false;
 				self.el.scrollbar.hide();
 			}
 		}
@@ -207,6 +212,11 @@ $.fn.MLMI_Scroller = function(_options)
 		}
 	};
 
+	self.isScrollable = function()
+	{
+		return self.status.is_scrollable;
+	};
+
 	return function()
 	{
 		// default options
@@ -222,8 +232,8 @@ $.fn.MLMI_Scroller = function(_options)
 
 		// resize element
 		$(window).on("load resize orientationchange", function(){
-			clearTimeout(self.resize_timeout);
-			self.resize_timeout = setTimeout(self.sizes, self.options.resize_delay);
+			clearTimeout(self.status.timeout_resize);
+			self.status.timeout_resize = setTimeout(self.sizes, self.options.resize_delay);
 		});
 
 		// scroller object
