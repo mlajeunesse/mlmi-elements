@@ -179,10 +179,12 @@ $.fn.MLMI_Scroller = function(_options)
 		if (self.el.scrollbar != undefined){
 			if (self.el.scroller.get(0).scrollHeight > self.el.scroller.outerHeight(false)){
 				self.status.is_scrollable = true;
+				self.addClass("is-scrollable");
 				self.el.scrollbar.show();
 				self.el.scrollbar.setVisiblePercentage(self.el.scroller.outerHeight() / self.el.scroller.get(0).scrollHeight);
 			} else {
 				self.status.is_scrollable = false;
+				self.removeClass("is-scrollable");
 				self.el.scrollbar.hide();
 			}
 		}
