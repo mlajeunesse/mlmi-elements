@@ -182,10 +182,12 @@ $.fn.MLMI_Scroller = function(_options)
 				self.addClass("is-scrollable");
 				self.el.scrollbar.show();
 				self.el.scrollbar.setVisiblePercentage(self.el.scroller.outerHeight() / self.el.scroller.get(0).scrollHeight);
+				self.trigger("scrollable", ["on"]);
 			} else {
 				self.status.is_scrollable = false;
 				self.removeClass("is-scrollable");
 				self.el.scrollbar.hide();
+				self.trigger("scrollable", ["off"]);
 			}
 		}
 	};
