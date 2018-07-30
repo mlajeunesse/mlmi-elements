@@ -1,3 +1,7 @@
+import $ from 'jquery';
+import 'jquery-ui/ui/widgets/draggable';
+import 'jquery-ui-touch-punch';
+
 /*
 *	BlockElement
 */
