@@ -1,7 +1,7 @@
 import $ from 'jquery';
-import './bem';
 import 'jquery-ui/ui/widgets/draggable';
 import 'jquery-ui-touch-punch';
+import './bem';
 
 /*
 *	Scrollbar

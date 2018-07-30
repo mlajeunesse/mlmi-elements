@@ -3,9 +3,9 @@
 ## Available elements
 
 - Scrollbar
+- jQuery BEM library
 
 ## Coming soon
 
-- jQuery BEM library
 - Burger element
 - 100vh fix for mobile
