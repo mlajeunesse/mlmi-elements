@@ -4,6 +4,33 @@ import 'jquery-ui-touch-punch';
 import './bem';
 
 /*
+*	Get browser scrollbar size
+*/
+
+function getBrowserScrollbarSize() {
+	let css = {
+		border:		"none",
+		height:		"200px",
+		margin:		"0",
+		padding:	"0",
+		width:		"200px"
+	},
+	inner = $("<div>").css($.extend({}, css)),
+	outer = $("<div>").css($.extend({
+		left:		"-1000px",
+		overflow:	"scroll",
+		position:	"absolute",
+		top:		"-1000px"
+	}, css)).append(inner).appendTo("body").scrollLeft(1000).scrollTop(1000),
+	scrollSize = {
+		height:		(outer.offset().top - inner.offset().top) || 0,
+		width:		(outer.offset().left - inner.offset().left) || 0
+	};
+	outer.remove();
+	return scrollSize;
+};
+
+/*
 *	Scrollbar
 */
 
@@ -19,7 +46,7 @@ $.fn.MLMI_Scrollbar = function(_scroller, _options)
 		dragging: false
 	};
 	_bar.active_timeout = undefined;
-
+	
 	_bar.dragging = function()
 	{
 		if (_bar.options.direction == 'vertical') {
@@ -29,30 +56,30 @@ $.fn.MLMI_Scrollbar = function(_scroller, _options)
 			_bar.scroller.setScrollPercentage(targetPercentage);
 		}
 	};
-
+	
 	_bar.start = function()
 	{
 		_bar.status.dragging = true;
 		_bar.addModifier('active').addModifier('dragging');
 	};
-
+	
 	_bar.stop = function()
 	{
 		_bar.status.dragging = false;
 		_bar.removeModifier('active').removeModifier('dragging');
 	};
-
+	
 	_bar.getScrollableHeight = function()
 	{
 		return _bar.height() - _bar.el.thumb.height();
 	};
-
+	
 	_bar.setScrollPercentage = function(_percentage)
 	{
 		_bar.el.thumb.css({
 			top: Math.ceil(_percentage * _bar.getScrollableHeight())
 		});
-
+		
 		// active scrollbar
 		if (_bar.active_timeout != undefined){
 			clearTimeout(_bar.active_timeout);
@@ -62,21 +89,21 @@ $.fn.MLMI_Scrollbar = function(_scroller, _options)
 			_bar.removeModifier("active");
 		}, 500);
 	};
-
+	
 	_bar.setVisiblePercentage = function(_percentage)
 	{
 		_bar.el.thumb.css({
 			height: (_percentage * 100) + "%"
 		});
 	};
-
+	
 	return function()
 	{
 		// default options
 		if (_bar.options == undefined) _bar.options = {};
 		if (!_bar.options.hasOwnProperty('direction')) _bar.options.direction = 'vertical';
 		if (!_bar.options.hasOwnProperty('size')) _bar.options.size = 'auto';
-
+		
 		// create elements
 		_bar.el.thumb = _bar.addBlockElement("thumb");
 		_bar.append(_bar.el.thumb);
@@ -88,7 +115,7 @@ $.fn.MLMI_Scrollbar = function(_scroller, _options)
 			drag: _bar.dragging,
 			stop: _bar.stop
 		});
-
+		
 		// scrollbar object
 		return _bar;
 	}();
@@ -110,36 +137,37 @@ $.fn.MLMI_Scroller = function(_options)
 		paddingTop: 0,
 		paddingRight: 0,
 		paddingBottom: 0,
-		paddingLeft: 0
+		paddingLeft: 0,
+		scrollbarWidth: getBrowserScrollbarSize().width,
 	};
 	self.status = {
 		is_scrollable: false,
 		timeout_resize: undefined
 	};
-
+	
 	self.sizes = function()
 	{
 		// reset forced padding 0
 		self.removeClass("scroller__container");
-
+		
 		// get initial properties
 		self.prop.paddingTop = parseFloat(self.css('paddingTop'));
 		self.prop.paddingRight = parseFloat(self.css('paddingRight'));
 		self.prop.paddingBottom = parseFloat(self.css('paddingBottom'));
 		self.prop.paddingLeft = parseFloat(self.css('paddingLeft'));
-
+		
 		// create scroller
 		self.el.scroller.css({
 			paddingTop: self.prop.paddingTop,
 			paddingLeft: self.prop.paddingLeft,
-			paddingRight: self.prop.paddingRight + self.options.spacing,
+			paddingRight: self.prop.paddingRight + self.options.spacing - self.prop.scrollbarWidth,
 			paddingBottom: self.prop.paddingBottom,
 			width: 'calc(100% + ' + self.options.spacing + 'px)'
 		});
-
+		
 		// add container forced padding to 0
 		self.addClass("scroller__container");
-
+		
 		// check if scrollbar is needed
 		if (self.el.scrollbar != undefined){
 			if (self.el.scroller.get(0).scrollHeight > self.el.scroller.outerHeight(false)){
@@ -156,7 +184,7 @@ $.fn.MLMI_Scroller = function(_options)
 			}
 		}
 	};
-
+	
 	self.addScrollbar = function(options)
 	{
 		self.el.scrollbar = self.el.scroller.addBlockElement("scrollbar").MLMI_Scrollbar(self, options);
@@ -165,12 +193,12 @@ $.fn.MLMI_Scroller = function(_options)
 		self.scrolled();
 		return self;
 	};
-
+	
 	self.setScrollPercentage = function(_scroll_percentage)
 	{
 		self.el.scroller.scrollTop((self.el.scroller.get(0).scrollHeight - self.el.scroller.outerHeight(false)) * _scroll_percentage);
 	};
-
+	
 	self.scrolled = function(event)
 	{
 		if (event != undefined){
@@ -183,31 +211,31 @@ $.fn.MLMI_Scroller = function(_options)
 			self.el.scrollbar.setScrollPercentage(targetPercentage);
 		}
 	};
-
+	
 	self.isScrollable = function()
 	{
 		return self.status.is_scrollable;
 	};
-
+	
 	return function()
 	{
 		// default options
 		if (self.options == undefined) self.options = {};
 		if (!self.options.hasOwnProperty('spacing')) self.options.spacing = 60;
 		if (!self.options.hasOwnProperty('resize_delay')) self.options.resize_delay = 60;
-
+		
 		// create scroller html structure
 		self.el.scroller = $('<div></div>').BlockElement('scroller');
 		self.sizes();
 		self.el.scroller.append(self.contents());
- 		self.append(self.el.scroller);
-
+		self.append(self.el.scroller);
+		
 		// resize element
 		$(window).on("load resize orientationchange", function(){
 			clearTimeout(self.status.timeout_resize);
 			self.status.timeout_resize = setTimeout(self.sizes, self.options.resize_delay);
 		});
-
+		
 		// scroller object
 		return self;
 	}();

@@ -1,6 +1,6 @@
 {
   "name": "mlmi-elements",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Éléments JS et jQuery de MLMI.",
   "author": "Mathieu Lajeunesse médias interactifs",
   "private": true,
