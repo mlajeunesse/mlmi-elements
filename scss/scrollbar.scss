@@ -47,7 +47,7 @@ $scrollbar-thumb-y: 0 !default;
       opacity: $scrollbar-opacity;
       transition: opacity $scrollbar-transition-duration ease;
 
-      &: after {
+      &:after {
         position: absolute;
         display: block;
         content: '';
@@ -62,14 +62,12 @@ $scrollbar-thumb-y: 0 !default;
     }
 
     &--active .scroller__scrollbar {
-
       &__thumb {
         opacity: $scrollbar-active-opacity;
       }
-
     }
 
-    &: hover .scroller__scrollbar, &--dragging .scroller__scrollbar {
+    &:hover .scroller__scrollbar, &--dragging .scroller__scrollbar {
       &__thumb {
         opacity: $scrollbar-hover-opacity;
       }
