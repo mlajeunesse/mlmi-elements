@@ -1,8 +1,12 @@
-import 'jquery-ui/ui/widgets/draggable';
-import 'jquery-ui-touch-punch';
-import '../plugins/bem';
+// import 'jquery-ui/ui/widgets/draggable';
+// import 'jquery-ui-touch-punch';
+// import '../plugins/bem';
 
 export default function (selector) {
+	
+	require('jquery-ui/ui/widgets/draggable');
+	require('jquery-ui-touch-punch');
+	require('../plugins/bem');
 	
 	var obj = this;
 	this.selector = selector;
