@@ -2,23 +2,23 @@
 * Viewport Height Fixer
 */
 export default function (options) {
-  
+
   /* Default properties */
   this.elements = [];
   this.options = {
     selector: '.screen',
     inner: '.screen__content'
   };
-  
+
   /* jQuery object */
   $.fn.MLMI_ViewportHeight = function(options)
   {
     let self = this;
-  
+
     self.status = {
       managed: false,
     };
-  
+
     self.check = function()
     {
       // reset if managed
@@ -29,12 +29,12 @@ export default function (options) {
           'height': '',
         });
       }
-  
+
       // check heights
       let selfHeight = self.outerHeight(false),
         windowHeight = $(window).height(),
         targetHeight = windowHeight;
-  
+
       if (self.find(options.inner).length){
         let innerHeight = self.find(options.inner).outerHeight(false);
         if (innerHeight > windowHeight){
@@ -49,7 +49,7 @@ export default function (options) {
         });
       }
     };
-  
+
     return function()
     {
       $(window).on("load orientationchange resize", self.check);
@@ -60,7 +60,7 @@ export default function (options) {
       return self;
     }();
   };
-  
+
   /* Public object */
   this.update = function() {
     let obj = this;
@@ -72,7 +72,7 @@ export default function (options) {
       }
     });
   };
-  
+
   /* Initializer */
   $.extend(this.options, options);
   this.update();

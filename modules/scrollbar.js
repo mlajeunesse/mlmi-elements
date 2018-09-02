@@ -2,14 +2,14 @@
 * DOM Scrollbar
 */
 export default function (selector) {
-	
+
 	require('jquery-ui/ui/widgets/draggable');
 	require('jquery-ui-touch-punch');
 	require('../plugins/bem');
-	
+
 	var obj = this;
 	this.selector = selector;
-	
+
 	/*
 	*	Get browser scrollbar size utility
 	*/
@@ -35,7 +35,7 @@ export default function (selector) {
 		outer.remove();
 		return scrollSize;
 	};
-	
+
 	/*
 	*	Scrollbar jQuery plugin
 	*/
@@ -125,7 +125,7 @@ export default function (selector) {
 			return _bar;
 		}();
 	};
-	
+
 	/*
 	*	Scroller jQuery plugin
 	*/
@@ -244,10 +244,10 @@ export default function (selector) {
 			return self;
 		}();
 	};
-	
+
 	/* Initializer */
 	$(this.selector).each(function(){
 		$(this).MLMI_Scroller().addScrollbar();
 	});
-	
+
 }
