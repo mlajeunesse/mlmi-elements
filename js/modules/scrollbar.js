@@ -1,7 +1,6 @@
-// import 'jquery-ui/ui/widgets/draggable';
-// import 'jquery-ui-touch-punch';
-// import '../plugins/bem';
-
+/*
+* DOM Scrollbar
+*/
 export default function (selector) {
 	
 	require('jquery-ui/ui/widgets/draggable');
