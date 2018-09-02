@@ -21,8 +21,8 @@ $scrollbar-thumb-y: 0 !default;
   &__container {
     box-sizing: border-box;
     padding: 0;
-    overflow: hidden !important;
-    position: relative !important;
+    overflow: hidden;
+    position: relative;
 
     * { box-sizing: inherit; }
   }
@@ -47,7 +47,7 @@ $scrollbar-thumb-y: 0 !default;
       opacity: $scrollbar-opacity;
       transition: opacity $scrollbar-transition-duration ease;
 
-      &:after {
+      &::after {
         position: absolute;
         display: block;
         content: '';
@@ -67,7 +67,8 @@ $scrollbar-thumb-y: 0 !default;
       }
     }
 
-    &:hover .scroller__scrollbar, &--dragging .scroller__scrollbar {
+    &:hover .scroller__scrollbar,
+    &--dragging .scroller__scrollbar {
       &__thumb {
         opacity: $scrollbar-hover-opacity;
       }
