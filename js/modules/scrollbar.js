@@ -1,8 +1,11 @@
 import 'jquery-ui/ui/widgets/draggable';
 import 'jquery-ui-touch-punch';
-import './plugins/bem';
+import '../plugins/bem';
 
-export default function () {
+export default function (selector) {
+	
+	var obj = this;
+	this.selector = selector;
 	
 	/*
 	*	Get browser scrollbar size utility
@@ -136,7 +139,7 @@ export default function () {
 			paddingRight: 0,
 			paddingBottom: 0,
 			paddingLeft: 0,
-			scrollbarWidth: getBrowserScrollbarSize().width,
+			scrollbarWidth: obj.getBrowserScrollbarSize().width,
 		};
 		self.status = {
 			is_scrollable: false,
@@ -238,5 +241,10 @@ export default function () {
 			return self;
 		}();
 	};
+	
+	/* Initializer */
+	$(this.selector).each(function(){
+		$(this).MLMI_Scroller().addScrollbar();
+	});
 	
 }
