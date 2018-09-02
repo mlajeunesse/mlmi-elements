@@ -1,3 +1,7 @@
+import 'jquery-ui/ui/widgets/draggable';
+import 'jquery-ui-touch-punch';
+import './plugins/bem';
+
 export default function () {
 	
 	/*
