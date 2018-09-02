@@ -4,7 +4,7 @@
 $.fn.BlockElement = function(_block_class)
 {
 	var _el = this;
-	_el.block_class = _block_class;
+	_el.block_class = undefined;
 
 	_el.getBlockClass = function()
 	{
@@ -17,6 +17,7 @@ $.fn.BlockElement = function(_block_class)
 		var newBlockElement = $('<' + _element + '>').BlockElement(_el.getBlockClass() + "__" + _element_class);
 		return newBlockElement;
 	};
+	_el.addElement = el.addBlockElement;
 
 	_el.addModifier = function(_modifier_class)
 	{
@@ -32,6 +33,10 @@ $.fn.BlockElement = function(_block_class)
 
 	return function()
 	{
+		if (_block_class == undefined){
+			_block_class = _el.class();
+		}
+		_el.block_class = _block_class;
 		_el.addClass(_el.block_class)
 		return _el;
 	}();
