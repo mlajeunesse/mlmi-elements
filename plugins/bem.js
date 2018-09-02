@@ -41,7 +41,7 @@ $.fn.BlockElement = function(_block_class)
 	return function()
 	{
 		if (_block_class == undefined){
-			_block_class = _el.class();
+			_block_class = _el.attr("class").split(" ")[0];
 		}
 		_el.block_class = _block_class;
 		_el.addClass(_el.block_class)
