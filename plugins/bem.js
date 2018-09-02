@@ -1,7 +1,6 @@
 /*
 *	BlockElement
 */
-
 $.fn.BlockElement = function(_block_class)
 {
 	var _el = this;

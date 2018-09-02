@@ -1,10 +1,10 @@
 {
   "name": "mlmi-elements",
-  "version": "0.2.10",
+  "version": "0.2.11",
   "description": "Éléments MLMI.",
   "author": "Mathieu Lajeunesse médias interactifs",
   "private": true,
-  "main": "js/index.js",
+  "main": "index.js",
   "devDependencies": {
     "browser-sync": "^2.24.4",
     "browserify": "^16.2.2",
