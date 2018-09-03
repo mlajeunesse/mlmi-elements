@@ -1,10 +1,11 @@
+import TRANSITION_END from '../utils';
+
 /*
 * Navigation
 */
 export default function () {
 
 	require('../plugins/bem');
-  const TRANSITION_END = "webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend";
 
   /*
   *	Properties
