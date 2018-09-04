@@ -1,19 +1,21 @@
+import 'jquery-ui/ui/widgets/draggable';
+import 'jquery-ui-touch-punch';
+import '../plugins/bem';
+
+
 /*
 * DOM Scrollbar
 */
-export default function (selector) {
-
-	require('jquery-ui/ui/widgets/draggable');
-	require('jquery-ui-touch-punch');
-	require('../plugins/bem');
-
-	var obj = this;
-	this.selector = selector;
+export default function (selector)
+{
+  var obj = this;
+  this.selector = selector;
+  this.scrollbars = [];
 
 	/*
 	*	Get browser scrollbar size utility
 	*/
-	this.getBrowserScrollbarSize = function() {
+	obj.getBrowserScrollbarSize = function() {
 		let css = {
 			border:		"none",
 			height:		"200px",
@@ -145,7 +147,7 @@ export default function (selector) {
 			scrollbarWidth: obj.getBrowserScrollbarSize().width,
 		};
 		self.status = {
-			is_scrollable: false,
+			isScrollable: false,
 			timeout_resize: undefined
 		};
 
@@ -175,13 +177,13 @@ export default function (selector) {
 			// check if scrollbar is needed
 			if (self.el.scrollbar != undefined){
 				if (self.el.scroller.get(0).scrollHeight > self.el.scroller.outerHeight(false)){
-					self.status.is_scrollable = true;
+					self.status.isScrollable = true;
 					self.addClass("is-scrollable");
 					self.el.scrollbar.show();
 					self.el.scrollbar.setVisiblePercentage(self.el.scroller.outerHeight() / self.el.scroller.get(0).scrollHeight);
 					self.trigger("scrollable", ["on"]);
 				} else {
-					self.status.is_scrollable = false;
+					self.status.isScrollable = false;
 					self.removeClass("is-scrollable");
 					self.el.scrollbar.hide();
 					self.trigger("scrollable", ["off"]);
@@ -218,7 +220,7 @@ export default function (selector) {
 
 		self.isScrollable = function()
 		{
-			return self.status.is_scrollable;
+			return self.status.isScrollable;
 		};
 
 		return function()
@@ -245,9 +247,19 @@ export default function (selector) {
 		}();
 	};
 
+  /* Update scrollbars */
+  this.update = function()
+  {
+    obj.scrollbars.forEach(function(scrollbar){
+      scrollbar.sizes();
+    });
+  };
+
 	/* Initializer */
-	$(this.selector).each(function(){
-		$(this).MLMI_Scroller().addScrollbar();
+	$(selector).each(function(){
+    let scrollbar = $(this).MLMI_Scroller().addScrollbar();
+		obj.scrollbars.push(scrollbar);
 	});
+  return obj;
 
 }

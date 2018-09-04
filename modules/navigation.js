@@ -1,59 +1,63 @@
-import TRANSITION_END from '../utils';
+import { TRANSITION_END } from '../utils';
+import '../plugins/bem';
 
 /*
 * Navigation
 */
-export default function () {
-
-	require('../plugins/bem');
+export default function (options) {
 
   /*
   *	Properties
   */
   var obj = this;
   this.currentURL = undefined;
-  this.useTransition = true;
+	this.isLoading = false;
   this.isPopping = false;
 
   /*
   * Options
   */
-  this.options = {
+  this.options = $.extend({
+    useTransition: true,
     selectors: {
       pageTransition: '.page-transition',
-      pageContent: '.wrapper'
+      pageContent: '.wrapper',
+      pageTarget: '.wrapper'
     }
-  };
+  }, options);
 
   /*
   * Elements
   */
   this.el = {
-    pageTransition: $(this.options.selectors.pageTransition).BlockElement(),
-    pageContent: $(this.options.selectors.pageContent),
+    pageTransition: (this.options.useTransition) ? $(this.options.selectors.pageTransition).BlockElement() : undefined,
+    pageTarget: $(this.options.selectors.pageTarget),
   };
 
   /*
   *	Page display
   */
-  this.pageDisplay = function(loadedURL, loadedContent)
+  this.pageDisplay = function(targetURL, loadedContent)
   {
     // Display loaded page
     let response = $('<html>').html(loadedContent);
-    obj.el.pageContent.replaceWith($(obj.options.selectors.pageContent, response));
-    obj.el.pageContent = $(obj.options.selectors.pageContent);
+    obj.el.pageTarget.replaceWith($(obj.options.selectors.pageContent, response));
+    obj.el.pageTarget = $(obj.options.selectors.pageTarget);
     setTimeout(function(){
-      if (loadedURL == obj.currentURL){
+      if (targetURL == obj.currentURL){
+				obj.isLoading = false;
         window.dispatchEvent(new CustomEvent('page_load'));
       }
     }, 50);
 
     // Remove transition
-    setTimeout(function(){
-      obj.el.pageTransition.addModifier("hidden").on(TRANSITION_END, function(){
-        obj.el.pageTransition.off(TRANSITION_END).removeModifier("visible").removeModifier("hidden");
-      });
-    }, 	150);
+    if (obj.options.useTransition){
+      setTimeout(function(){
+        obj.el.pageTransition.addModifier("hidden").on(TRANSITION_END, function(){
+          obj.el.pageTransition.off(TRANSITION_END).removeModifier("visible").removeModifier("hidden");
+        });
+      }, 	150);
+    }
 
     // Push state
     if (!obj.isPopping){
@@ -70,33 +74,41 @@ export default function () {
   /*
   *	Page transition
   */
-  this.pageTransition = function(href)
+  this.getPage = function(href)
   {
     // Keep current URL
     obj.currentURL = href;
 
     // Setting variables
-    var loadedURL = href,
+    var targetURL = href,
       loadedContent = undefined,
       pageHasDisappeared = false,
       contentHasLoaded = false;
 
     // Show page transition
-    obj.el.pageTransition.addModifier("visible").on(TRANSITION_END, function(){
-      $(this).off(TRANSITION_END);
-      window.dispatchEvent(new CustomEvent('page_exit'));
-      pageHasDisappeared = true;
-      if (contentHasLoaded){
-        obj.pageDisplay(loadedURL, loadedContent);
-      }
-      $.get(loadedURL, {}, function(x){
-        loadedContent = x;
-        contentHasLoaded = true;
-        if (pageHasDisappeared){
-          obj.pageDisplay(loadedURL, loadedContent);
+		obj.isLoading = true;
+    if (obj.options.useTransition){
+      obj.el.pageTransition.addModifier("visible").on(TRANSITION_END, function(){
+        $(this).off(TRANSITION_END);
+        window.dispatchEvent(new CustomEvent('page_exit'));
+        pageHasDisappeared = true;
+        if (contentHasLoaded){
+          obj.pageDisplay(targetURL, loadedContent);
         }
+        $.get(targetURL, {}, function(loadedContent){
+          loadedContent = x;
+          contentHasLoaded = true;
+          if (pageHasDisappeared){
+            obj.pageDisplay(targetURL, loadedContent);
+          }
+        }, 'html');
+      });
+    } else {
+      window.dispatchEvent(new CustomEvent('page_exit'));
+      $.get(targetURL, {}, function(x){
+        obj.pageDisplay(targetURL, x);
       }, 'html');
-    });
+    }
   };
 
   /*
@@ -110,7 +122,7 @@ export default function () {
       if (popState != null){
         if (popState.isPageTransition != null && popState.isPageTransition == true){
           obj.isPopping = true;
-          obj.pageTransition(e.target.location.href);
+          obj.getPage(e.target.location.href);
         }
       }
     });
@@ -124,11 +136,10 @@ export default function () {
     /* Transition links */
     $(document).on("click", "a", function(e){
       if (e.originalEvent.cmdKey || e.originalEvent.metaKey){ return true; }
-      if (!obj.useTransition) return true;
       if ($(this).hasClass("no-transition")){ return true; }
       if ($(this).attr("href") === "#"){ return false; }
       if ($(this).attr("target") === "_blank"){ return true; }
-      obj.pageTransition($(this).attr("href"));
+      obj.getPage($(this).attr("href"));
       return false;
     });
 
