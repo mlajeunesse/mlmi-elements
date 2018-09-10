@@ -76,6 +76,9 @@ export default function (options) {
   */
   this.getPage = function(href)
   {
+    // Signal page change
+    window.dispatchEvent(new CustomEvent('page_started'));
+
     // Keep current URL
     obj.currentURL = href;
 
