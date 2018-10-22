@@ -2,7 +2,7 @@ export const TRANSITION_END = "webkitTransitionEnd otransitionend oTransitionEnd
 
 export const ANIMATION_END = "webkitAnimationEnd oanimationend oAnimationEnd msAnimationEnd animationend";
 
-export default var Utils = {
+export default {
   extend: function(object, properties) {
     var newObject = Object.create(object);
     for (var property in properties){
