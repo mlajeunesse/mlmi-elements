@@ -2,7 +2,6 @@ import 'jquery-ui/ui/widgets/draggable';
 import 'jquery-ui-touch-punch';
 import '../plugins/bem';
 
-
 /*
 * DOM Scrollbar
 */
