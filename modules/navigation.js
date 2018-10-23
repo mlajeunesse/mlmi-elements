@@ -18,6 +18,7 @@ export default function (options) {
   * Options
   */
   this.options = $.extend({
+    init: true,
     useTransition: true,
     selectors: {
       pageTransition: '.page-transition',
@@ -76,9 +77,6 @@ export default function (options) {
   */
   this.getPage = function(href)
   {
-    // Signal page change
-    window.dispatchEvent(new CustomEvent('page_started'));
-
     // Keep current URL
     obj.currentURL = href;
 
@@ -98,14 +96,14 @@ export default function (options) {
         if (contentHasLoaded){
           obj.pageDisplay(targetURL, loadedContent);
         }
-        $.get(targetURL, {}, function(loadedContent){
-          loadedContent = x;
-          contentHasLoaded = true;
-          if (pageHasDisappeared){
-            obj.pageDisplay(targetURL, loadedContent);
-          }
-        }, 'html');
       });
+      $.get(targetURL, {}, function(x){
+        loadedContent = x;
+        contentHasLoaded = true;
+        if (pageHasDisappeared){
+          obj.pageDisplay(targetURL, loadedContent);
+        }
+      }, 'html');
     } else {
       window.dispatchEvent(new CustomEvent('page_exit'));
       $.get(targetURL, {}, function(x){
@@ -148,7 +146,10 @@ export default function (options) {
 
     /* First page load */
     window.dispatchEvent(new CustomEvent('page_load'));
-    return obj;
-  }();
+  };
 
+  if (obj.options.init === true){
+    obj.init();
+  }
+  return obj;
 }
