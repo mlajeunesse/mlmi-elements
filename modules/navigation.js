@@ -20,6 +20,7 @@ export default function (options) {
   this.options = $.extend({
     init: true,
     useTransition: true,
+    useEvents: true,
     selectors: {
       pageTransition: '.page-transition',
       pageContent: '.wrapper',
@@ -47,7 +48,9 @@ export default function (options) {
     setTimeout(function(){
       if (targetURL == obj.currentURL){
 				obj.isLoading = false;
-        window.dispatchEvent(new CustomEvent('page_load'));
+        if (obj.options.useEvents){
+          window.dispatchEvent(new CustomEvent('page_load'));
+        }
       }
     }, 50);
 
@@ -83,6 +86,9 @@ export default function (options) {
     // Default callback
     if (callback == undefined){
       callback = obj.pageDisplay;
+      obj.isUsingCustomCallback = true;
+    } else {
+      obj.isUsingCustomCallback = false;
     }
 
     // Setting variables
@@ -96,7 +102,9 @@ export default function (options) {
     if (obj.options.useTransition){
       obj.el.pageTransition.addModifier("visible").on(TRANSITION_END, function(){
         $(this).off(TRANSITION_END);
-        window.dispatchEvent(new CustomEvent('page_exit'));
+        if (obj.options.useEvents){
+          window.dispatchEvent(new CustomEvent('page_exit'));
+        }
         pageHasDisappeared = true;
         if (contentHasLoaded){
           callback(targetURL, loadedContent);
@@ -110,7 +118,9 @@ export default function (options) {
         }
       }, 'html');
     } else {
-      window.dispatchEvent(new CustomEvent('page_exit'));
+      if (obj.options.useEvents){
+        window.dispatchEvent(new CustomEvent('page_exit'));
+      }
       $.get(targetURL, {}, function(x){
         loadedContent = x;
         callback(targetURL, loadedContent);
@@ -151,7 +161,9 @@ export default function (options) {
     });
 
     /* First page load */
-    window.dispatchEvent(new CustomEvent('page_load'));
+    if (obj.options.useEvents){
+      window.dispatchEvent(new CustomEvent('page_load'));
+    }
   };
 
   /* Initialize and/or return */
