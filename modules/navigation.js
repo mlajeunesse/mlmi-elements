@@ -75,10 +75,15 @@ export default function (options) {
   /*
   *	Page transition
   */
-  this.getPage = function(href)
+  this.getPage = function(href, callback)
   {
     // Keep current URL
     obj.currentURL = href;
+
+    // Default callback
+    if (callback == undefined){
+      callback = obj.pageDisplay;
+    }
 
     // Setting variables
     var targetURL = href,
@@ -94,20 +99,21 @@ export default function (options) {
         window.dispatchEvent(new CustomEvent('page_exit'));
         pageHasDisappeared = true;
         if (contentHasLoaded){
-          obj.pageDisplay(targetURL, loadedContent);
+          callback(targetURL, loadedContent);
         }
       });
       $.get(targetURL, {}, function(x){
         loadedContent = x;
         contentHasLoaded = true;
         if (pageHasDisappeared){
-          obj.pageDisplay(targetURL, loadedContent);
+          callback(targetURL, loadedContent);
         }
       }, 'html');
     } else {
       window.dispatchEvent(new CustomEvent('page_exit'));
       $.get(targetURL, {}, function(x){
-        obj.pageDisplay(targetURL, x);
+        loadedContent = x;
+        callback(targetURL, loadedContent);
       }, 'html');
     }
   };
@@ -148,6 +154,7 @@ export default function (options) {
     window.dispatchEvent(new CustomEvent('page_load'));
   };
 
+  /* Initialize and/or return */
   if (obj.options.init === true){
     obj.init();
   }
