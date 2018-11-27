@@ -13,6 +13,9 @@ export default function (options) {
   this.currentURL = undefined;
 	this.isLoading = false;
   this.isPopping = false;
+  if (options == undefined){
+    options = {};
+  }
 
   /*
   * Options

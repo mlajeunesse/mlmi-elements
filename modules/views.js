@@ -5,7 +5,7 @@ export default {
   namespace: 'global',
   navigation: undefined,
 
-  onPageLoad() {
+  onPageLoad: function() {
     let namespace = $(this.navigation.options.selectors.pageTarget).data('namespace');
     if (namespace == undefined) namespace = "global";
     this.views.forEach(function(view){
@@ -20,7 +20,7 @@ export default {
     });
   },
 
-  onPageExit() {
+  onPageExit: function() {
     let namespace = $(this.navigation.options.selectors.pageContent).data('namespace');
     if (namespace == undefined) namespace = "global";
     this.views.forEach(function(view){
@@ -35,7 +35,7 @@ export default {
     });
   },
 
-  extend(globalView, pageView) {
+  extend: function(globalView, pageView) {
     let view = Object.assign( Object.create( Object.getPrototypeOf(globalView)), globalView)
     if (view.hasOwnProperty('onEnter') && typeof view.onEnter === 'function'){
       view.onEnterGlobal = view.onEnter;
@@ -53,7 +53,7 @@ export default {
     return view;
   },
 
-  init(navigation, views) {
+  init: function(navigation, views) {
     let self = this;
     this.views = views;
     this.navigation = navigation;
