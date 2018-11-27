@@ -23,8 +23,8 @@ export default function (options) {
     useEvents: true,
     selectors: {
       pageTransition: '.page-transition',
-      pageContent: '.wrapper',
-      pageTarget: '.wrapper'
+      pageContent: '.app',
+      pageTarget: '.app'
     }
   }, options);
 
