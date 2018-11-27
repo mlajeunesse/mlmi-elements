@@ -1,13 +1,13 @@
 /*
 * Toggling Mobile and Desktop
 */
-export default function (mobileSize = 767) {
+export default function (mobileSize) {
 
   var obj = this;
   this.isMobile = -1;
   this.mobileCallback = undefined;
   this.desktopCallback = undefined;
-  this.mobileSize = mobileSize;
+  this.mobileSize = mobileSize ? mobileSize : 767;
 
   /* Check mobile on resize */
   this.resized = function()	{
