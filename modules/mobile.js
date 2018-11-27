@@ -16,13 +16,13 @@ export default function (mobileSize) {
       if (obj.mobileCallback != undefined){
         obj.mobileCallback();
       }
-      window.dispatchEvent(new CustomEvent('toggle'));
+      $(window).trigger('toggle');
 		} else if ((obj.isMobile === -1 || obj.isMobile) && "matchMedia" in window && window.matchMedia("(min-width: " + (obj.mobileSize + 1) + "px)").matches) {
 			obj.isMobile = false;
       if (obj.desktopCallback != undefined){
         obj.desktopCallback();
       }
-      window.dispatchEvent(new CustomEvent('toggle'));
+      $(window).trigger('toggle');
 		}
 	}
 

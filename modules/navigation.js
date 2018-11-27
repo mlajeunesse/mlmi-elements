@@ -52,7 +52,7 @@ export default function (options) {
       if (targetURL == obj.currentURL){
 				obj.isLoading = false;
         if (obj.options.useEvents){
-          window.dispatchEvent(new CustomEvent('page_load'));
+          $(window).trigger('page_load');
         }
       }
     }, 50);
@@ -111,7 +111,7 @@ export default function (options) {
       obj.el.pageTransition.addModifier("visible").on(TRANSITION_END, function(){
         $(this).off(TRANSITION_END);
         if (obj.options.useEvents){
-          window.dispatchEvent(new CustomEvent('page_exit'));
+          $(window).trigger('page_exit');
         }
         pageHasDisappeared = true;
         if (contentHasLoaded){
@@ -127,7 +127,7 @@ export default function (options) {
       }, 'html');
     } else {
       if (obj.options.useEvents){
-        window.dispatchEvent(new CustomEvent('page_exit'));
+        $(window).trigger('page_exit');
       }
       $.get(targetURL, {}, function(x){
         loadedContent = x;
@@ -170,7 +170,7 @@ export default function (options) {
 
     /* First page load */
     if (obj.options.useEvents){
-      window.dispatchEvent(new CustomEvent('page_load'));
+      $(window).trigger('page_load');
     }
   };
 
