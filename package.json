@@ -1,6 +1,6 @@
 {
   "name": "mlmi-elements",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "description": "Éléments MLMI.",
   "author": "Mathieu Lajeunesse médias interactifs",
   "private": true,
@@ -12,7 +12,7 @@
     "gulp-autoprefixer": "^5.0.0",
     "gulp-clean": "^0.4.0",
     "gulp-clean-css": "^3.10.0",
-    "gulp-plumber": "^1.2.0",
+    "gulp-plumber": "^1.2.1",
     "gulp-rename": "^1.4.0",
     "gulp-sass": "^4.0.2",
     "gulp-sourcemaps": "^2.6.4",

@@ -72,6 +72,11 @@ export default function (options) {
       };
       window.history.pushState(data, $("title", response).text(), obj.currentURL);
     }
+
+    // Analytics called if available
+    if ("gtag" in window && "gtagid" in window){
+      gtag('config', window.gtagid, { 'page_location': obj.currentURL, });
+    }
     obj.isPopping = false;
   };
 
