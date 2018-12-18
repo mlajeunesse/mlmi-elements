@@ -11,9 +11,9 @@ export default function (options) {
   */
   var obj = this;
   this.currentURL = undefined;
-	this.isLoading = false;
+  this.isLoading = false;
   this.isPopping = false;
-  if (options == undefined){
+  if (options == undefined) {
     options = {};
   }
 
@@ -48,26 +48,27 @@ export default function (options) {
     let response = $('<html>').html(loadedContent);
     obj.el.pageTarget.replaceWith($(obj.options.selectors.pageContent, response));
     obj.el.pageTarget = $(obj.options.selectors.pageTarget);
-    setTimeout(function(){
-      if (targetURL == obj.currentURL){
-				obj.isLoading = false;
-        if (obj.options.useEvents){
+    setTimeout(function() {
+      if (targetURL == obj.currentURL) {
+        obj.isLoading = false;
+        obj.registerLinks();
+        if (obj.options.useEvents) {
           $(window).trigger('page_load');
         }
       }
     }, 50);
 
     // Remove transition
-    if (obj.options.useTransition){
-      setTimeout(function(){
-        obj.el.pageTransition.addModifier("hidden").on(TRANSITION_END, function(){
+    if (obj.options.useTransition) {
+      setTimeout(function() {
+        obj.el.pageTransition.addModifier("hidden").on(TRANSITION_END, function() {
           obj.el.pageTransition.off(TRANSITION_END).removeModifier("visible").removeModifier("hidden");
         });
       }, 	150);
     }
 
     // Push state
-    if (!obj.isPopping){
+    if (!obj.isPopping) {
       document.title = $("title", response).text();
       var data = {
         isPageTransition: true,
@@ -77,7 +78,7 @@ export default function (options) {
     }
 
     // Analytics called if available
-    if ("gtag" in window && "gtagid" in window){
+    if ("gtag" in window && "gtagid" in window) {
       gtag('config', window.gtagid, { 'page_location': obj.currentURL, });
     }
     obj.isPopping = false;
@@ -92,7 +93,7 @@ export default function (options) {
     obj.currentURL = href;
 
     // Default callback
-    if (callback == undefined){
+    if (callback == undefined) {
       callback = obj.pageDisplay;
       obj.isUsingCustomCallback = true;
     } else {
@@ -101,39 +102,68 @@ export default function (options) {
 
     // Setting variables
     var targetURL = href,
-      loadedContent = undefined,
-      pageHasDisappeared = false,
-      contentHasLoaded = false;
+    loadedContent = undefined,
+    pageHasDisappeared = false,
+    contentHasLoaded = false;
 
     // Show page transition
-		obj.isLoading = true;
-    if (obj.options.useTransition){
-      obj.el.pageTransition.addModifier("visible").on(TRANSITION_END, function(){
+    obj.isLoading = true;
+    if (obj.options.useTransition) {
+      obj.el.pageTransition.addModifier("visible").on(TRANSITION_END, function() {
         $(this).off(TRANSITION_END);
-        if (obj.options.useEvents){
+        if (obj.options.useEvents) {
           $(window).trigger('page_exit');
         }
         pageHasDisappeared = true;
-        if (contentHasLoaded){
+        if (contentHasLoaded) {
           callback(targetURL, loadedContent);
         }
       });
-      $.get(targetURL, {}, function(x){
+      $.get(targetURL, {}, function(x) {
         loadedContent = x;
         contentHasLoaded = true;
-        if (pageHasDisappeared){
+        if (pageHasDisappeared) {
           callback(targetURL, loadedContent);
         }
       }, 'html');
     } else {
-      if (obj.options.useEvents){
+      if (obj.options.useEvents) {
         $(window).trigger('page_exit');
       }
-      $.get(targetURL, {}, function(x){
+      $.get(targetURL, {}, function(x) {
         loadedContent = x;
         callback(targetURL, loadedContent);
       }, 'html');
     }
+  };
+
+  /*
+  * Register links
+  */
+  this.registerLinks = function()
+  {
+    $("a[target!='_blank']").each(function(){
+      if (!$(this).data("registeredTransitionLink")){
+        $(this).data("registeredTransitionLink", 1);
+        if ($(this).attr("href") && $(this).attr("href").substr(0,4) == "http" && $(this).attr("href").indexOf(window.location.hostname) === -1){
+          $(this).attr("target", "_blank");
+        }
+        $(this).on("click", function(e){
+          if ($(this).attr("target") === "_blank"){
+            return true;
+          }
+          if (e.originalEvent.cmdKey || e.originalEvent.metaKey){ return true; }
+          var link = $(this).attr("href"),
+          ext = link.substr(link.lastIndexOf('.') + 1);
+          if (link.substr(0,7) === "mailto:"){ return true; }
+          if (link.substr(0,4) === "tel:"){ return true; }
+          if (link === "#") { return false; }
+          if (["pdf", "jpg", "gif", "png", "doc", "docx", "xls", "xlsx", "ppt", "txt", "xml"].indexOf(ext) !== -1){ return true; }
+          obj.getPage(link);
+          return false;
+        });
+      }
+    });
   };
 
   /*
@@ -142,10 +172,10 @@ export default function (options) {
   this.init = function()
   {
     /* Pop state (back) */
-    $(window).on("popstate", function(e){
+    $(window).on("popstate", function(e) {
       let popState = e.originalEvent.state;
-      if (popState != null){
-        if (popState.isPageTransition != null && popState.isPageTransition == true){
+      if (popState != null) {
+        if (popState.isPageTransition != null && popState.isPageTransition == true) {
           obj.isPopping = true;
           obj.getPage(e.target.location.href);
         }
@@ -158,24 +188,17 @@ export default function (options) {
       previousPageURL: window.location.href
     }, document.title, window.location.href);
 
-    /* Transition links */
-    $(document).on("click", "a", function(e){
-      if (e.originalEvent.cmdKey || e.originalEvent.metaKey){ return true; }
-      if ($(this).hasClass("no-transition")){ return true; }
-      if ($(this).attr("href") === "#"){ return false; }
-      if ($(this).attr("target") === "_blank"){ return true; }
-      obj.getPage($(this).attr("href"));
-      return false;
-    });
-
     /* First page load */
-    if (obj.options.useEvents){
+    if (obj.options.useEvents) {
       $(window).trigger('page_load');
     }
+
+    /* Register links */
+    obj.registerLinks();
   };
 
   /* Initialize and/or return */
-  if (obj.options.init === true){
+  if (obj.options.init === true) {
     obj.init();
   }
   return obj;
