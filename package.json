@@ -1,26 +1,10 @@
 {
   "name": "mlmi-elements",
-  "version": "0.4.9",
+  "version": "0.4.10",
   "description": "Éléments MLMI.",
   "author": "Mathieu Lajeunesse médias interactifs",
   "private": true,
   "main": "index.js",
-  "devDependencies": {
-    "browser-sync": "^2.26.3",
-    "browserify": "^16.2.3",
-    "gulp": "^3.9.1",
-    "gulp-autoprefixer": "^5.0.0",
-    "gulp-clean": "^0.4.0",
-    "gulp-clean-css": "^3.10.0",
-    "gulp-plumber": "^1.2.1",
-    "gulp-rename": "^1.4.0",
-    "gulp-sass": "^4.0.2",
-    "gulp-sourcemaps": "^2.6.4",
-    "gulp-uglify": "^3.0.1",
-    "vinyl-buffer": "^1.0.1",
-    "vinyl-source-stream": "^2.0.0",
-    "vinyl-transform": "^1.0.0"
-  },
   "dependencies": {
     "jquery": "^3.3.1",
     "jquery-ui": "^1.12.1",
