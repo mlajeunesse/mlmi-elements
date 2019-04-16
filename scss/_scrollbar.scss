@@ -19,6 +19,36 @@ $scrollbar-thumb-y: 0 !default;
   -webkit-overflow-scrolling: touch;
   max-height: 100%;
 
+  &--horizontal {
+    max-height: none;
+    max-width: 100%;
+
+    + .scroller__scrollbar {
+      top: auto;
+      right: auto;
+      bottom: 0;
+      left: 0;
+      height: $scrollbar-width;
+      width: $scrollbar-height;
+
+      .scroller__scrollbar__thumb {
+        top: auto;
+        bottom: 0;
+        height: 100%;
+        width: $scrollbar-thumb-height;
+        min-width: $scrollbar-thumb-min-height;
+        min-height: 0;
+
+        &::after {
+          top: $scrollbar-thumb-x;
+          right: $scrollbar-thumb-y;
+          bottom: $scrollbar-thumb-x;
+          left: $scrollbar-thumb-y;
+        }
+      }
+    }
+  }
+
   &__container {
     box-sizing: border-box;
     padding: 0;

@@ -5,11 +5,18 @@ import '../plugins/bem';
 /*
 * DOM Scrollbar
 */
-export default function (selector)
+export default function (selector, options)
 {
   var obj = this;
   this.selector = selector;
   this.scrollbars = [];
+
+  /*
+  * Options
+  */
+  this.options = $.extend({
+    direction: 'vertical',
+  }, options);
 
 	/*
 	*	Get browser scrollbar size utility
@@ -55,8 +62,13 @@ export default function (selector)
 
 		_bar.dragging = function()
 		{
-			if (_bar.options.direction == 'vertical') {
-				var targetPercentage = parseFloat(_bar.el.thumb.css('top')) / _bar.getScrollableHeight();
+      if (_bar.options.direction == 'vertical') {
+				var targetPercentage = parseFloat(_bar.el.thumb.css('top')) / _bar.getScrollableSize();
+				if (targetPercentage < 0) targetPercentage = 0;
+				if (targetPercentage > 1) targetPercentage = 1;
+				_bar.scroller.setScrollPercentage(targetPercentage);
+			} else if (_bar.options.direction == 'horizontal') {
+				var targetPercentage = parseFloat(_bar.el.thumb.css('left')) / _bar.getScrollableSize();
 				if (targetPercentage < 0) targetPercentage = 0;
 				if (targetPercentage > 1) targetPercentage = 1;
 				_bar.scroller.setScrollPercentage(targetPercentage);
@@ -75,16 +87,28 @@ export default function (selector)
 			_bar.removeModifier('active').removeModifier('dragging');
 		};
 
-		_bar.getScrollableHeight = function()
+		_bar.getScrollableSize = function()
 		{
-			return _bar.height() - _bar.el.thumb.height();
+      let scrollableSize = 0;
+      if (_bar.options.direction == 'vertical') {
+        scrollableSize = _bar.height() - _bar.el.thumb.height();
+      } else if (_bar.options.direction == 'horizontal') {
+        scrollableSize = _bar.width() - _bar.el.thumb.width();
+      }
+			return scrollableSize;
 		};
 
 		_bar.setScrollPercentage = function(_percentage)
 		{
-			_bar.el.thumb.css({
-				top: Math.ceil(_percentage * _bar.getScrollableHeight())
-			});
+      if (_bar.options.direction == 'vertical') {
+        _bar.el.thumb.css({
+  				top: Math.ceil(_percentage * _bar.getScrollableSize())
+  			});
+      } else if (_bar.options.direction == 'horizontal') {
+        _bar.el.thumb.css({
+  				left: Math.ceil(_percentage * _bar.getScrollableSize())
+  			});
+      }
 
 			// active scrollbar
 			if (_bar.active_timeout != undefined){
@@ -98,9 +122,15 @@ export default function (selector)
 
 		_bar.setVisiblePercentage = function(_percentage)
 		{
-			_bar.el.thumb.css({
-				height: (_percentage * 100) + "%"
-			});
+      if (_bar.options.direction == 'vertical') {
+        _bar.el.thumb.css({
+  				height: (_percentage * 100) + "%"
+  			});
+      } else if (_bar.options.direction == 'horizontal') {
+        _bar.el.thumb.css({
+  				width: (_percentage * 100) + "%"
+  			});
+      }
 		};
 
 		return function()
@@ -162,24 +192,37 @@ export default function (selector)
 			self.prop.paddingLeft = parseFloat(self.css('paddingLeft'));
 
 			// create scroller
-			self.el.scroller.css({
+      let scrollerStyles = {
 				paddingTop: self.prop.paddingTop,
+        paddingRight: self.prop.paddingRight,
+        paddingBottom: self.prop.paddingBottom,
 				paddingLeft: self.prop.paddingLeft,
-				paddingRight: self.prop.paddingRight + self.options.spacing - self.prop.scrollbarWidth,
-				paddingBottom: self.prop.paddingBottom,
-				width: 'calc(100% + ' + self.options.spacing + 'px)'
-			});
+			};
+      if (self.options.direction == 'vertical') {
+        scrollerStyles.width = 'calc(100% + ' + self.options.spacing + 'px)';
+        scrollerStyles.paddingRight = self.prop.paddingRight + self.options.spacing - self.prop.scrollbarWidth;
+      } else if (self.options.direction == 'horizontal') {
+        scrollerStyles.height = 'calc(100% + ' + self.options.spacing + 'px)';
+        scrollerStyles.paddingBottom = self.prop.paddingBottom + self.options.spacing - self.prop.scrollbarWidth;
+      }
+			self.el.scroller.css(scrollerStyles);
 
 			// add container forced padding to 0
 			self.addClass("scroller__container");
 
 			// check if scrollbar is needed
 			if (self.el.scrollbar != undefined){
-				if (self.el.scroller.get(0).scrollHeight > self.el.scroller.outerHeight(false)){
+        if (self.options.direction == 'vertical' && self.el.scroller.get(0).scrollHeight > self.el.scroller.outerHeight(false)){
 					self.status.isScrollable = true;
 					self.addClass("is-scrollable");
 					self.el.scrollbar.show();
 					self.el.scrollbar.setVisiblePercentage(self.el.scroller.outerHeight() / self.el.scroller.get(0).scrollHeight);
+					self.trigger("scrollable", ["on"]);
+				} else if (self.options.direction == 'horizontal' && self.el.scroller.get(0).scrollWidth > self.el.scroller.outerWidth(false)){
+					self.status.isScrollable = true;
+					self.addClass("is-scrollable");
+					self.el.scrollbar.show();
+					self.el.scrollbar.setVisiblePercentage(self.el.scroller.outerWidth() / self.el.scroller.get(0).scrollWidth);
 					self.trigger("scrollable", ["on"]);
 				} else {
 					self.status.isScrollable = false;
@@ -201,7 +244,11 @@ export default function (selector)
 
 		self.setScrollPercentage = function(_scroll_percentage)
 		{
-			self.el.scroller.scrollTop((self.el.scroller.get(0).scrollHeight - self.el.scroller.outerHeight(false)) * _scroll_percentage);
+      if (self.options.direction == 'vertical') {
+        self.el.scroller.scrollTop((self.el.scroller.get(0).scrollHeight - self.el.scroller.outerHeight(false)) * _scroll_percentage);
+      } else if (self.options.direction == 'horizontal') {
+        self.el.scroller.scrollLeft((self.el.scroller.get(0).scrollWidth - self.el.scroller.outerWidth(false)) * _scroll_percentage);
+      }
 		};
 
 		self.scrolled = function(event)
@@ -210,7 +257,12 @@ export default function (selector)
 				event.stopPropagation();
 			}
 			if (!self.el.scrollbar.status.dragging){
-				var targetPercentage = self.el.scroller.scrollTop() / (self.el.scroller.get(0).scrollHeight - self.el.scroller.outerHeight(false));
+        let targetPercentage;
+        if (self.options.direction == 'vertical') {
+          targetPercentage = self.el.scroller.scrollTop() / (self.el.scroller.get(0).scrollHeight - self.el.scroller.outerHeight(false));
+        } else if (self.options.direction == 'horizontal') {
+          targetPercentage = self.el.scroller.scrollLeft() / (self.el.scroller.get(0).scrollWidth - self.el.scroller.outerWidth(false));
+        }
 				if (targetPercentage < 0) targetPercentage = 0;
 				if (targetPercentage > 1) targetPercentage = 1;
 				self.el.scrollbar.setScrollPercentage(targetPercentage);
@@ -231,6 +283,7 @@ export default function (selector)
 
 			// create scroller html structure
 			self.el.scroller = $('<div></div>').BlockElement('scroller');
+      self.el.scroller.addModifier(self.options.direction);
 			self.sizes();
 			self.el.scroller.append(self.contents());
 			self.append(self.el.scroller);
@@ -256,7 +309,7 @@ export default function (selector)
 
 	/* Initializer */
 	$(selector).each(function(){
-    let scrollbar = $(this).MLMI_Scroller().addScrollbar();
+    let scrollbar = $(this).MLMI_Scroller(obj.options).addScrollbar(obj.options);
 		obj.scrollbars.push(scrollbar);
 	});
   return obj;
