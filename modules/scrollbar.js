@@ -1,3 +1,4 @@
+import Mobile from './mobile'
 import 'jquery-ui/ui/widgets/draggable';
 import 'jquery-ui-touch-punch';
 import '../plugins/bem';
@@ -7,15 +8,18 @@ import '../plugins/bem';
 */
 export default function (selector, options)
 {
-  var obj = this;
-  this.selector = selector;
-  this.scrollbars = [];
+  let obj = this;
+  obj.selector = selector;
+  obj.scrollers = [];
+  obj.mobileChecker = new Mobile();
 
   /*
   * Options
   */
-  this.options = $.extend({
+  obj.options = $.extend({
     direction: 'vertical',
+    desktop: true,
+    mobile: true,
   }, options);
 
 	/*
@@ -49,7 +53,7 @@ export default function (selector, options)
 	*/
 	$.fn.MLMI_Scrollbar = function(_scroller, _options)
 	{
-		var _bar = this;
+		let _bar = this;
 		_bar.options = _options;
 		_bar.scroller = _scroller;
 		_bar.el = {
@@ -63,12 +67,12 @@ export default function (selector, options)
 		_bar.dragging = function()
 		{
       if (_bar.options.direction == 'vertical') {
-				var targetPercentage = parseFloat(_bar.el.thumb.css('top')) / _bar.getScrollableSize();
+				let targetPercentage = parseFloat(_bar.el.thumb.css('top')) / _bar.getScrollableSize();
 				if (targetPercentage < 0) targetPercentage = 0;
 				if (targetPercentage > 1) targetPercentage = 1;
 				_bar.scroller.setScrollPercentage(targetPercentage);
 			} else if (_bar.options.direction == 'horizontal') {
-				var targetPercentage = parseFloat(_bar.el.thumb.css('left')) / _bar.getScrollableSize();
+				let targetPercentage = parseFloat(_bar.el.thumb.css('left')) / _bar.getScrollableSize();
 				if (targetPercentage < 0) targetPercentage = 0;
 				if (targetPercentage > 1) targetPercentage = 1;
 				_bar.scroller.setScrollPercentage(targetPercentage);
@@ -111,11 +115,11 @@ export default function (selector, options)
       }
 
 			// active scrollbar
-			if (_bar.active_timeout != undefined){
+			if (_bar.active_timeout != undefined) {
 				clearTimeout(_bar.active_timeout);
 			}
 			_bar.addModifier("active");
-			_bar.active_timeout = setTimeout(function(){
+			_bar.active_timeout = setTimeout(function() {
 				_bar.removeModifier("active");
 			}, 500);
 		};
@@ -132,6 +136,10 @@ export default function (selector, options)
   			});
       }
 		};
+
+    _bar.kill = function() {
+      _bar.remove();
+    };
 
 		return function()
 		{
@@ -160,14 +168,15 @@ export default function (selector, options)
 	/*
 	*	Scroller jQuery plugin
 	*/
-	$.fn.MLMI_Scroller = function(_options)
-	{
-		var self = this;
-		self.options = _options;
+	$.fn.MLMI_Scroller = function(options) {
+		let self = this;
+		self.options = options;
+
 		self.el = {
 			scroller: undefined,
 			scrollbar: undefined
 		};
+
 		self.prop = {
 			paddingTop: 0,
 			paddingRight: 0,
@@ -175,13 +184,13 @@ export default function (selector, options)
 			paddingLeft: 0,
 			scrollbarWidth: obj.getBrowserScrollbarSize().width,
 		};
+
 		self.status = {
 			isScrollable: false,
 			timeout_resize: undefined
 		};
 
-		self.sizes = function()
-		{
+		self.sizes = function() {
 			// reset forced padding 0
 			self.removeClass("scroller__container");
 
@@ -211,14 +220,14 @@ export default function (selector, options)
 			self.addClass("scroller__container");
 
 			// check if scrollbar is needed
-			if (self.el.scrollbar != undefined){
-        if (self.options.direction == 'vertical' && self.el.scroller.get(0).scrollHeight > self.el.scroller.outerHeight(false)){
+			if (self.el.scrollbar != undefined) {
+        if (self.options.direction == 'vertical' && self.el.scroller.get(0).scrollHeight > self.el.scroller.outerHeight(false)) {
 					self.status.isScrollable = true;
 					self.addClass("is-scrollable");
 					self.el.scrollbar.show();
 					self.el.scrollbar.setVisiblePercentage(self.el.scroller.outerHeight() / self.el.scroller.get(0).scrollHeight);
 					self.trigger("scrollable", ["on"]);
-				} else if (self.options.direction == 'horizontal' && self.el.scroller.get(0).scrollWidth > self.el.scroller.outerWidth(false)){
+				} else if (self.options.direction == 'horizontal' && self.el.scroller.get(0).scrollWidth > self.el.scroller.outerWidth(false)) {
 					self.status.isScrollable = true;
 					self.addClass("is-scrollable");
 					self.el.scrollbar.show();
@@ -233,8 +242,7 @@ export default function (selector, options)
 			}
 		};
 
-		self.addScrollbar = function(options)
-		{
+		self.addScrollbar = function(options) {
 			self.el.scrollbar = self.el.scroller.addBlockElement("scrollbar").MLMI_Scrollbar(self, options);
 			self.el.scroller.on("scroll", self.scrolled);
 			self.sizes();
@@ -242,8 +250,7 @@ export default function (selector, options)
 			return self;
 		};
 
-		self.setScrollPercentage = function(_scroll_percentage)
-		{
+		self.setScrollPercentage = function(_scroll_percentage) {
       if (self.options.direction == 'vertical') {
         self.el.scroller.scrollTop((self.el.scroller.get(0).scrollHeight - self.el.scroller.outerHeight(false)) * _scroll_percentage);
       } else if (self.options.direction == 'horizontal') {
@@ -251,12 +258,11 @@ export default function (selector, options)
       }
 		};
 
-		self.scrolled = function(event)
-		{
-			if (event != undefined){
+		self.scrolled = function(event) {
+			if (event != undefined) {
 				event.stopPropagation();
 			}
-			if (!self.el.scrollbar.status.dragging){
+			if (!self.el.scrollbar.status.dragging) {
         let targetPercentage;
         if (self.options.direction == 'vertical') {
           targetPercentage = self.el.scroller.scrollTop() / (self.el.scroller.get(0).scrollHeight - self.el.scroller.outerHeight(false));
@@ -269,13 +275,30 @@ export default function (selector, options)
 			}
 		};
 
-		self.isScrollable = function()
-		{
+		self.isScrollable = function() {
 			return self.status.isScrollable;
 		};
 
-		return function()
-		{
+    self.resizeTimeout = function() {
+      clearTimeout(self.status.timeout_resize);
+      self.status.timeout_resize = setTimeout(function() {
+        if (self.el.scroller != undefined) {
+          self.sizes();
+        }
+      }, self.options.resize_delay);
+    };
+
+    self.kill = function() {
+      self.el.scrollbar.kill();
+      self.el.scrollbar = undefined;
+			$(window).off("load resize orientationchange", self.resizeTimeout);
+			self.removeClass("scroller__container is-scrollable");
+      self.prepend(self.el.scroller.contents());
+      self.el.scroller.remove();
+      self.el.scroller = undefined;
+    };
+
+		return function() {
 			// default options
 			if (self.options == undefined) self.options = {};
 			if (!self.options.hasOwnProperty('spacing')) self.options.spacing = 60;
@@ -289,10 +312,7 @@ export default function (selector, options)
 			self.append(self.el.scroller);
 
 			// resize element
-			$(window).on("load resize orientationchange", function(){
-				clearTimeout(self.status.timeout_resize);
-				self.status.timeout_resize = setTimeout(self.sizes, self.options.resize_delay);
-			});
+			$(window).on("load resize orientationchange", self.resizeTimeout);
 
 			// scroller object
 			return self;
@@ -300,18 +320,45 @@ export default function (selector, options)
 	};
 
   /* Update scrollbars */
-  this.update = function()
-  {
-    obj.scrollbars.forEach(function(scrollbar){
-      scrollbar.sizes();
+  obj.update = function() {
+    obj.scrollers.forEach(function(scroller) {
+      scroller.sizes();
     });
   };
 
-	/* Initializer */
-	$(selector).each(function(){
-    let scrollbar = $(this).MLMI_Scroller(obj.options).addScrollbar(obj.options);
-		obj.scrollbars.push(scrollbar);
-	});
-  return obj;
+  /* Kill scrollbars */
+  obj.kill = function() {
+    obj.scrollers.forEach(function(scroller) {
+      scroller.kill();
+    });
+    obj.scrollers = [];
+  };
 
+	/* Initialize */
+  obj.init = function() {
+    obj.mobileChecker.addCallbacks(function() {
+      if (obj.options.mobile) {
+        $(selector).each(function() {
+          let scrollbar = $(this).MLMI_Scroller(obj.options).addScrollbar(obj.options);
+      		obj.scrollers.push(scrollbar);
+      	});
+      } else {
+        obj.kill();
+      }
+    }, function() {
+      if (obj.options.desktop) {
+        $(selector).each(function() {
+          let scrollbar = $(this).MLMI_Scroller(obj.options).addScrollbar(obj.options);
+      		obj.scrollers.push(scrollbar);
+      	});
+      } else {
+        obj.kill();
+      }
+    });
+  };
+
+  if ($(selector).length) {
+    obj.init();
+  }
+  return obj;
 }
