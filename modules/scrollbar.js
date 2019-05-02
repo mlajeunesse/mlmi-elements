@@ -51,8 +51,7 @@ export default function (selector, options)
 	/*
 	*	Scrollbar jQuery plugin
 	*/
-	$.fn.MLMI_Scrollbar = function(_scroller, _options)
-	{
+	$.fn.MLMI_Scrollbar = function(_scroller, _options) {
 		let _bar = this;
 		_bar.options = _options;
 		_bar.scroller = _scroller;

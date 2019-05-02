@@ -24,7 +24,7 @@ export default function (mobileSize) {
       }
       $(window).trigger('toggle');
 		}
-	}
+	};
 
   /* Add callbacks */
   this.addCallbacks = function(_mobileCallback, _desktopCallback, _autoRun) {
@@ -38,7 +38,13 @@ export default function (mobileSize) {
       }
     }
     return obj;
-  }
+  };
+
+  this.kill = function() {
+    this.mobileCallback = undefined;
+    this.desktopCallback = undefined;
+    $(window).off("resize orientationchange load", obj.resized);
+  };
 
   /* Initializer */
   $(window).on("resize orientationchange load", obj.resized);

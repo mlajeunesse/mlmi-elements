@@ -152,7 +152,7 @@ export default function (options) {
           if ($(this).attr("target") === "_blank"){
             return true;
           }
-          if (e.originalEvent.cmdKey || e.originalEvent.metaKey){ return true; }
+          if (e.originalEvent != undefined && (e.originalEvent.cmdKey || e.originalEvent.metaKey)){ return true; }
           var link = $(this).attr("href"),
           ext = link.substr(link.lastIndexOf('.') + 1);
           if (link.substr(0,7) === "mailto:"){ return true; }
