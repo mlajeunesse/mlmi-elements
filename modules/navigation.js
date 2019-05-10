@@ -1,6 +1,8 @@
 import { TRANSITION_END } from '../utils';
 import '../plugins/bem';
 
+/* global gtag */
+
 /*
 * Navigation
 */
@@ -13,6 +15,7 @@ export default function (options) {
   this.currentURL = undefined;
   this.isLoading = false;
   this.isPopping = false;
+
   if (options == undefined) {
     options = {};
   }
@@ -27,8 +30,8 @@ export default function (options) {
     selectors: {
       pageTransition: '.page-transition',
       pageContent: '.app',
-      pageTarget: '.app'
-    }
+      pageTarget: '.app',
+    },
   }, options);
 
   /*
@@ -42,8 +45,7 @@ export default function (options) {
   /*
   *	Page display
   */
-  this.pageDisplay = function(targetURL, loadedContent)
-  {
+  this.pageDisplay = function(targetURL, loadedContent) {
     // Display loaded page
     let response = $('<html>').html(loadedContent);
     obj.el.pageTarget.replaceWith($(obj.options.selectors.pageContent, response));
@@ -72,14 +74,16 @@ export default function (options) {
       document.title = $("title", response).text();
       var data = {
         isPageTransition: true,
-        previousPageURL: window.location.href
+        previousPageURL: window.location.href,
       };
       window.history.pushState(data, $("title", response).text(), obj.currentURL);
     }
 
     // Analytics called if available
     if ("gtag" in window && "gtagid" in window) {
-      gtag('config', window.gtagid, { 'page_location': obj.currentURL, });
+      gtag('config', window.gtagid, {
+        'page_location': obj.currentURL,
+      });
     }
     obj.isPopping = false;
   };
@@ -125,7 +129,15 @@ export default function (options) {
         if (pageHasDisappeared) {
           callback(targetURL, loadedContent);
         }
-      }, 'html');
+      }, 'html').fail(function(x) {
+        if (x.status == 404) {
+          loadedContent = x.responseText;
+          contentHasLoaded = true;
+          if (pageHasDisappeared) {
+            callback(targetURL, loadedContent);
+          }
+        }
+      });
     } else {
       if (obj.options.useEvents) {
         $(window).trigger('page_exit');
@@ -133,7 +145,12 @@ export default function (options) {
       $.get(targetURL, {}, function(x) {
         loadedContent = x;
         callback(targetURL, loadedContent);
-      }, 'html');
+      }, 'html').fail(function(x) {
+        if (x.status == 404) {
+          loadedContent = x.responseText;
+          callback(targetURL, loadedContent);
+        }
+      });
     }
   };
 
@@ -188,7 +205,7 @@ export default function (options) {
     /* Replace initial state (load) */
     window.history.replaceState({
       isPageTransition: true,
-      previousPageURL: window.location.href
+      previousPageURL: window.location.href,
     }, document.title, window.location.href);
 
     /* First page load */
