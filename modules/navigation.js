@@ -80,10 +80,14 @@ export default function (options) {
     }
 
     // Analytics called if available
-    if ("gtag" in window && "gtagid" in window) {
-      gtag('config', window.gtagid, {
-        'page_location': obj.currentURL,
-      });
+    if ("gtag" in window) {
+      if ("gtagid" in window) {
+        gtag('config', window.gtagid, {
+          'page_location': obj.currentURL,
+        });
+      } else {
+        console.log("Erreur: définir le ID gtag pour mlmi-elements");
+      }
     }
     obj.isPopping = false;
   };
