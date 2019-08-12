@@ -151,7 +151,7 @@ export default function (selector, options)
 			_bar.el.thumb = _bar.addBlockElement("thumb");
 			_bar.append(_bar.el.thumb);
 			_bar.scroller.append(_bar);
-			_bar.el.thumb.draggable({
+			$(_bar.el.thumb).draggable({
 				axis: _bar.options.direction == 'horizontal' ? 'x' : 'y',
 				containment: _bar,
 				start: _bar.start,
