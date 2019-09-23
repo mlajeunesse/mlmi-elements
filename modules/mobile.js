@@ -5,8 +5,8 @@ export default function (mobileSize) {
 
   var obj = this;
   this.isMobile = -1;
-  this.mobileCallback = undefined;
-  this.desktopCallback = undefined;
+  this.mobileCallbacks = [];
+  this.desktopCallbacks = [];
   this.mobileSize = mobileSize ? mobileSize : 767;
 
   /* Check mobile on resize */
@@ -26,15 +26,28 @@ export default function (mobileSize) {
 		}
 	};
 
+  /* Call callbacks */
+  obj.callMobile = function() {
+    obj.mobileCallbacks.forEach(function(callback) {
+      callback();
+    });
+  };
+
+  obj.callDesktop = function() {
+    obj.desktopCallbacks.forEach(function(callback) {
+      callback();
+    });
+  };
+
   /* Add callbacks */
   this.addCallbacks = function(_mobileCallback, _desktopCallback, _autoRun) {
-    obj.mobileCallback = _mobileCallback;
-    obj.desktopCallback = _desktopCallback;
+    obj.mobileCallbacks.push(_mobileCallback);
+    obj.desktopCallbacks.push(_desktopCallback);
     if (_autoRun === undefined || _autoRun == true){
       if (obj.isMobile === true){
-        obj.mobileCallback();
+        obj.callMobile();
       } else if (obj.isMobile === false){
-        obj.desktopCallback();
+        obj.callDesktop();
       }
     }
     return obj;
