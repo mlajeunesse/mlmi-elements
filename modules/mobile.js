@@ -13,15 +13,11 @@ export default function (mobileSize) {
   this.resized = function()	{
 		if ((obj.isMobile === -1 || !obj.isMobile) && "matchMedia" in window && window.matchMedia("(max-width: " + obj.mobileSize + "px)").matches){
 			obj.isMobile = true;
-      if (obj.mobileCallback != undefined){
-        obj.mobileCallback();
-      }
+      obj.callMobile();
       $(window).trigger('toggle');
 		} else if ((obj.isMobile === -1 || obj.isMobile) && "matchMedia" in window && window.matchMedia("(min-width: " + (obj.mobileSize + 1) + "px)").matches) {
 			obj.isMobile = false;
-      if (obj.desktopCallback != undefined){
-        obj.desktopCallback();
-      }
+      obj.callDesktop();
       $(window).trigger('toggle');
 		}
 	};
@@ -54,8 +50,8 @@ export default function (mobileSize) {
   };
 
   this.kill = function() {
-    this.mobileCallback = undefined;
-    this.desktopCallback = undefined;
+    this.mobileCallbacks = [];
+    this.desktopCallbacks = [];
     $(window).off("resize orientationchange load", obj.resized);
   };
 
