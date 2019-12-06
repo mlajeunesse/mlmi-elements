@@ -177,14 +177,18 @@ export default function (options) {
             return true;
           }
           if (e.originalEvent != undefined && (e.originalEvent.cmdKey || e.originalEvent.metaKey)){ return true; }
-          var link = $(this).attr("href"),
-          ext = link.substr(link.lastIndexOf('.') + 1);
-          if (link.substr(0,7) === "mailto:"){ return true; }
-          if (link.substr(0,4) === "tel:"){ return true; }
-          if (link === "#") { return false; }
-          if (["pdf", "jpg", "gif", "png", "doc", "docx", "xls", "xlsx", "ppt", "txt", "xml"].indexOf(ext) !== -1){ return true; }
-          obj.getPage(link);
-          return false;
+          var link = $(this).attr("href");
+          if (link) {
+            if (link.substr(0,7) === "mailto:"){ return true; }
+            if (link.substr(0,4) === "tel:"){ return true; }
+            if (link === "#") { return false; }
+            var ext = link.substr(link.lastIndexOf('.') + 1);
+            if (ext) {
+              if (["pdf", "jpg", "gif", "png", "doc", "docx", "xls", "xlsx", "ppt", "txt", "xml"].indexOf(ext) !== -1){ return true; }
+            }
+            obj.getPage(link);
+            return false;
+          }
         });
       }
     });
