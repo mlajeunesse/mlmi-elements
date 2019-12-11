@@ -220,17 +220,17 @@ export default function (selector, options)
 
 			// check if scrollbar is needed
 			if (self.el.scrollbar != undefined) {
-        if (self.options.direction == 'vertical' && self.el.scroller.get(0).scrollHeight > self.el.scroller.outerHeight(false)) {
+        if (self.options.direction == 'vertical' && Math.ceil(self.el.scroller.get(0).scrollHeight) > Math.ceil(self.el.scroller.outerHeight(false))) {
 					self.status.isScrollable = true;
 					self.addClass("is-scrollable");
 					self.el.scrollbar.show();
-					self.el.scrollbar.setVisiblePercentage(self.el.scroller.outerHeight() / self.el.scroller.get(0).scrollHeight);
+					self.el.scrollbar.setVisiblePercentage(self.el.scroller.outerHeight(false) / self.el.scroller.get(0).scrollHeight);
 					self.trigger("scrollable", ["on"]);
-				} else if (self.options.direction == 'horizontal' && self.el.scroller.get(0).scrollWidth > self.el.scroller.outerWidth(false)) {
+				} else if (self.options.direction == 'horizontal' && Math.ceil(self.el.scroller.get(0).scrollWidth) > Math.ceil(self.el.scroller.outerWidth(false))) {
 					self.status.isScrollable = true;
 					self.addClass("is-scrollable");
 					self.el.scrollbar.show();
-					self.el.scrollbar.setVisiblePercentage(self.el.scroller.outerWidth() / self.el.scroller.get(0).scrollWidth);
+					self.el.scrollbar.setVisiblePercentage(self.el.scroller.outerWidth(false) / self.el.scroller.get(0).scrollWidth);
 					self.trigger("scrollable", ["on"]);
 				} else {
 					self.status.isScrollable = false;
