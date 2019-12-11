@@ -37,6 +37,7 @@ $scrollbar-thumb-y: 0 !default;
         height: 100%;
         width: $scrollbar-thumb-height;
         min-width: $scrollbar-thumb-min-height;
+        max-width: $scrollbar-thumb-max-height;
         min-height: 0;
 
         &::after {
@@ -75,6 +76,7 @@ $scrollbar-thumb-y: 0 !default;
       width: 100%;
       height: $scrollbar-thumb-height;
       min-height: $scrollbar-thumb-min-height;
+      max-height: $scrollbar-thumb-max-height;
       opacity: $scrollbar-opacity;
       transition: opacity $scrollbar-transition-duration ease;
 
