@@ -55,7 +55,7 @@ export default function (options) {
         obj.isLoading = false;
         obj.registerLinks();
         if (obj.options.useEvents) {
-          $(window).trigger('page_load');
+          $(window).trigger('page_load', [loadedContent]);
         }
       }
     }, 50);
