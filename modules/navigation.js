@@ -206,15 +206,20 @@ export default function (options) {
         if (popState.isPageTransition != null && popState.isPageTransition == true) {
           obj.isPopping = true;
           obj.getPage(e.target.location.href);
+        } else {
+          location.href = e.target.location.href;
+          return true;
         }
       }
     });
 
     /* Replace initial state (load) */
-    window.history.replaceState({
-      isPageTransition: obj.options.usePageTransition && !obj.el.pageTarget.data('no-transition'),
-      previousPageURL: window.location.href,
-    }, document.title, window.location.href);
+    if (!obj.el.pageTarget.data('no-transition')) {
+      window.history.replaceState({
+        isPageTransition: true,
+        previousPageURL: window.location.href,
+      }, document.title, window.location.href);
+    }
 
     /* First page load */
     if (obj.options.useEvents) {
