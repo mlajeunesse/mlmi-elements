@@ -212,7 +212,7 @@ export default function (options) {
 
     /* Replace initial state (load) */
     window.history.replaceState({
-      isPageTransition: true,
+      isPageTransition: obj.options.usePageTransition && !obj.el.pageTarget.data('no-transition'),
       previousPageURL: window.location.href,
     }, document.title, window.location.href);
 
