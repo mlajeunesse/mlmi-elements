@@ -44,7 +44,7 @@ $burger-bottom-rotation: -225deg !default;
     }
   }
 
-  &[aria-expanded="true"] &,
+  &[aria-expanded="true"]:not(.burger--fixed) &,
   &--close & {
     &__el {
       &--top {
