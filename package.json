@@ -1,12 +1,12 @@
 {
   "name": "mlmi-elements",
-  "version": "0.4.31",
+  "version": "0.4.32",
   "description": "Éléments MLMI",
   "author": "Mathieu Lajeunesse médias interactifs",
   "private": true,
   "main": "index.js",
   "dependencies": {
-    "jquery": "^3.4",
+    "jquery": "^3.4.1",
     "jquery-ui": "^1.12",
     "jquery-ui-touch-punch": "^0.2"
   }
