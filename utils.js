@@ -25,7 +25,7 @@ export function validateEmail(emailAddress) {
 /* Set cookie */
 export function setCookie(cookie_name, cookie_value, seconds) {
   let cookieTime = new Date();
-  cookieTime.setTime(currentTime.getTime() + (seconds * 1000));
+  cookieTime.setTime(cookieTime.getTime() + (seconds * 1000));
   document.cookie = cookie_name + "=" + cookie_value + ";" + "expires=" + cookieTime.toUTCString() + ";path=/";
 }
 
