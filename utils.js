@@ -23,14 +23,14 @@ export function validateEmail(emailAddress) {
 }
 
 /* Set cookie */
-function setCookie(cookie_name, cookie_value, seconds) {
+export function setCookie(cookie_name, cookie_value, seconds) {
   let cookieTime = new Date();
   cookieTime.setTime(currentTime.getTime() + (seconds * 1000));
   document.cookie = cookie_name + "=" + cookie_value + ";" + "expires=" + cookieTime.toUTCString() + ";path=/";
 }
 
 /* Read cookie */
-function getCookie(cookie_name) {
+export function getCookie(cookie_name) {
   let name = cookie_name + "=";
   let ca = document.cookie.split(';');
   for (let i = 0; i < ca.length; i++) {
@@ -46,7 +46,7 @@ function getCookie(cookie_name) {
 }
 
 /* Read GET parameter */
-function getParameter(parameterName) {
+export function getParameter(parameterName) {
   let result = false, tmp = [];
   let items = location.search.substr(1).split("&");
   for (let index = 0; index < items.length; index++) {
