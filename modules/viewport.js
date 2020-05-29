@@ -6,22 +6,25 @@ import Mobile from './mobile'
 export default function (options) {
 
   /* Default properties */
-  var obj = this;
-  this.elements = [];
-  this.mobileChecker = new Mobile();
+  var obj = this
+  this.elements = []
+  this.mobileChecker = new Mobile()
   this.options = $.extend({
     selector: '.screen',
     inner: undefined,
+    innerMinHeight: true,
+    updateDynamically: true,
     desktop: true,
     mobile: true,
-  }, options);
+  }, options)
 
   /* jQuery object */
   $.fn.MLMI_ViewportHeight = function(options)
   {
-    let self = this;
+    let self = this
 
-    self.is_height_set = false;
+    self.check_timer = undefined
+    self.is_height_set = false
 
     self.check = function()
     {
@@ -30,67 +33,80 @@ export default function (options) {
         self.css({
           'min-height': '',
           'height': '',
-        });
-        return;
+        })
+        return
       }
 
       // reset if already set
       if (self.is_height_set) {
-        self.is_height_set = false;
+        self.is_height_set = false
         self.css({
           'min-height': '',
           'height': '',
-        });
+        })
       }
+
+      // trigger event
+      self.trigger('viewport_reset')
 
       // check heights
       let selfHeight = self.outerHeight(false),
-      windowHeight = $(window).height(),
+      windowHeight = window.innerHeight,
       innerHeight = self.find(options.inner).outerHeight(false),
-      targetHeight = windowHeight;
+      targetHeight = windowHeight
 
       // check minimum using inner element
       if (innerHeight > windowHeight) {
-        targetHeight = innerHeight;
-        self.is_height_set = true;
+        if (options.innerMinHeight) {
+          targetHeight = innerHeight
+        }
+        self.is_height_set = true
         self.css({
           'min-height': targetHeight + "px",
           'height': targetHeight + "px",
-        });
+        })
       } else if (selfHeight > windowHeight) {
-        self.is_height_set = true;
+        self.is_height_set = true
         self.css({
           'min-height': targetHeight + "px",
           'height': targetHeight + "px",
-        });
+        })
       }
-    };
+
+      // trigger event
+      self.trigger('viewport_fixed', [selfHeight, windowHeight, innerHeight, targetHeight])
+    }
 
     return function()
     {
-      $(window).on("load orientationchange resize", self.check);
+      if (options.updateDynamically) {
+        $(window).on("load orientationchange resize", function() {
+          clearTimeout(self.check_timer)
+          self.check_timer = setTimeout(self.check, 350)
+        })
+      }
       self.find("img").on("load", function() {
-        self.check();
-      });
-      self.check();
-      return self;
-    }();
-  };
+        self.check()
+      })
+      self.check()
+      return self
+    }()
+  }
 
   /* Public object */
   this.update = function() {
-    let obj = this;
+    let obj = this
     $(this.options.selector).each(function() {
       if (!$(this).data("element--viewport")) {
-        $(this).data("element--viewport", true);
-        let viewportElement = $(this).MLMI_ViewportHeight(obj.options);
-        obj.elements.push(viewportElement);
+        $(this).data("element--viewport", true)
+        let viewportElement = $(this).MLMI_ViewportHeight(obj.options)
+        obj.elements.push(viewportElement)
       }
-    });
-  };
+    })
+  }
 
   /* Initializer */
-  $.extend(this.options, options);
-  this.update();
-  return this;
+  $.extend(this.options, options)
+  this.update()
+  return this
 }
