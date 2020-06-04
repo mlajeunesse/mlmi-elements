@@ -1,0 +1,141 @@
+$use-floating-labels : false !default;
+
+$field-padding : 0 !default;
+$field-border-radius : 0 !default;
+
+$input-border : 1px solid $black !default;
+$input-border-focus : $input-border !default;
+$input-border-active : $input-border !default;
+$input-background : $white !default;
+$input-background-focus : $input-background !default;
+$input-background-active : $input-background !default;
+$input-padding : rem(8) !default;
+
+$submit-border : 1px solid $black !default;
+$submit-border-hover : $submit-border !default;
+$submit-border-focus : $submit-border !default;
+$submit-border-active : $submit-border !default;
+$submit-background : $white !default;
+$submit-background-hover : $submit-background !default;
+$submit-background-focus : $submit-background !default;
+$submit-background-active : $submit-background !default;
+$submit-padding : rem(8) !default;
+
+@mixin input-reset() {
+  appearance: none;
+  background-color: transparent;
+  border: 0;
+  border-radius: 0;
+  outline: none;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+@mixin button-reset() {
+  display: inline-block;
+  appearance: none;
+  background-color: transparent;
+  border: 0;
+  outline: none;
+
+  &:hover {
+    text-decoration: none;
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.field {
+  display: flex;
+  position: relative;
+  padding: $field-padding;
+  border-radius: $field-border-radius;
+  width: 100%;
+
+  @if $use-floating-labels == false {
+    flex-direction: column;
+  }
+
+  &__input:not([type='checkbox']) {
+    @include input-reset;
+    width: 100%;
+    display: inline-block;
+    vertical-align: middle;
+    border: $input-border;
+    padding: $input-padding;
+    background-color: $input-background;
+
+    &:focus {
+      border: $input-border-focus;
+      background-color: $input-background-focus;
+    }
+
+    &:active {
+      border: $submit-border-active;
+      background: $submit-background-active;
+    }
+
+    @if $use-floating-labels == false {
+      order: 2;
+    }
+  }
+
+  &__label {
+    @if $use-floating-labels {
+      user-select: none;
+      pointer-events: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      padding: $input-padding;
+      border: $input-border;
+      border-color: transparent;
+    }
+
+    @if $use-floating-labels == false {
+      order: 1;
+    }
+  }
+
+  &__submit {
+    display: block;
+    border: $submit-border;
+    background: $submit-background;
+    padding: $submit-padding;
+
+    &:hover {
+      border: $submit-border-hover;
+      background: $submit-background-hover;
+    }
+
+    &:focus {
+      border: $submit-border-focus;
+      background: $submit-border-focus;
+    }
+
+    &:active {
+      border: $submit-border-active;
+      background: $submit-background-active;
+    }
+  }
+
+  &--type-true_false {
+    flex-direction: row;
+    align-items: center;
+
+    .field {
+      &__label {
+        position: relative;
+      }
+    }
+  }
+}
+
+.field-error,
+.form-error {
+  color: $danger;
+}
