@@ -11,7 +11,7 @@ export default function (options) {
   /*
   *	Properties
   */
-  var obj = this;
+  let obj = this;
   this.currentURL = undefined;
   this.isLoading = false;
   this.isPopping = false;
@@ -63,30 +63,30 @@ export default function (options) {
     // Remove transition
     if (obj.options.useTransition) {
       setTimeout(function() {
-        obj.el.pageTransition.addModifier("hidden").on(TRANSITION_END, function() {
-          obj.el.pageTransition.off(TRANSITION_END).removeModifier("visible").removeModifier("hidden");
+        obj.el.pageTransition.addModifier('hidden').on(TRANSITION_END, function() {
+          obj.el.pageTransition.off(TRANSITION_END).removeModifier('visible').removeModifier('hidden');
         });
       }, 	150);
     }
 
     // Push state
     if (!obj.isPopping) {
-      document.title = $("title", response).text();
-      var data = {
+      document.title = $('title', response).text();
+      let data = {
         isPageTransition: true,
         previousPageURL: window.location.href,
       };
-      window.history.pushState(data, $("title", response).text(), obj.currentURL);
+      window.history.pushState(data, $('title', response).text(), obj.currentURL);
     }
 
     // Analytics called if available
-    if ("gtag" in window) {
-      if ("gtagid" in window) {
+    if ('gtag' in window) {
+      if ('gtagid' in window) {
         gtag('config', window.gtagid, {
           'page_location': obj.currentURL,
         });
       } else {
-        console.log("Erreur: définir le ID gtag pour mlmi-elements");
+        console.log('Erreur: définir le ID gtag pour mlmi-elements');
       }
     }
     obj.isPopping = false;
@@ -109,7 +109,7 @@ export default function (options) {
     }
 
     // Setting variables
-    var targetURL = href,
+    let targetURL = href,
     loadedContent = undefined,
     pageHasDisappeared = false,
     contentHasLoaded = false;
@@ -117,7 +117,7 @@ export default function (options) {
     // Show page transition
     obj.isLoading = true;
     if (obj.options.useTransition) {
-      obj.el.pageTransition.addModifier("visible").on(TRANSITION_END, function() {
+      obj.el.pageTransition.addModifier('visible').on(TRANSITION_END, function() {
         $(this).off(TRANSITION_END);
         if (obj.options.useEvents) {
           $(window).trigger('page_exit');
@@ -163,28 +163,28 @@ export default function (options) {
   */
   this.registerLinks = function()
   {
-    $("a[target!='_blank']").each(function(){
-      if (!$(this).data("registeredTransitionLink")){
-        $(this).data("registeredTransitionLink", 1);
-        if ($(this).attr("href") && $(this).attr("href").substr(0,4) == "http" && $(this).attr("href").indexOf(window.location.hostname) === -1){
-          $(this).attr("target", "_blank");
+    $('a[target!="_blank"]').each(function() {
+      if (!$(this).data('registeredTransitionLink')) {
+        $(this).data('registeredTransitionLink', 1);
+        if ($(this).attr('href') && $(this).attr('href').substr(0,4) == 'http' && $(this).attr('href').indexOf(window.location.hostname) === -1) {
+          $(this).attr('target', '_blank');
         }
-        $(this).on("click", function(e){
-          if ($(this).attr("target") === "_blank"){
+        $(this).on('click', function(e) {
+          if ($(this).attr('target') === '_blank') {
             return true;
           }
-          if ($(this).data("preventTransition") === 1) {
+          if ($(this).data('preventTransition') === 1) {
             return true;
           }
-          if (e.originalEvent != undefined && (e.originalEvent.cmdKey || e.originalEvent.metaKey)){ return true; }
-          var link = $(this).attr("href");
+          if (e.originalEvent != undefined && (e.originalEvent.cmdKey || e.originalEvent.metaKey)) { return true; }
+          let link = $(this).attr('href');
           if (link) {
-            if (link.substr(0,7) === "mailto:"){ return true; }
-            if (link.substr(0,4) === "tel:"){ return true; }
-            if (link === "#") { return false; }
-            var ext = link.substr(link.lastIndexOf('.') + 1);
+            if (link.substr(0,7) === 'mailto:') { return true; }
+            if (link.substr(0,4) === 'tel:') { return true; }
+            if (link === '#') { return false; }
+            let ext = link.substr(link.lastIndexOf('.') + 1);
             if (ext) {
-              if (["pdf", "jpg", "gif", "png", "doc", "docx", "xls", "xlsx", "ppt", "txt", "xml"].indexOf(ext) !== -1){ return true; }
+              if (['pdf', 'jpg', 'gif', 'png', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'txt', 'xml'].indexOf(ext) !== -1) { return true; }
             }
             obj.getPage(link);
             return false;
@@ -200,7 +200,7 @@ export default function (options) {
   this.init = function()
   {
     /* Pop state (back) */
-    $(window).on("popstate", function(e) {
+    $(window).on('popstate', function(e) {
       let popState = e.originalEvent.state;
       if (popState != null) {
         if (popState.isPageTransition != null && popState.isPageTransition == true) {

@@ -27,19 +27,19 @@ export default function (selector, options)
 	*/
 	obj.getBrowserScrollbarSize = function() {
 		let css = {
-			border:		"none",
-			height:		"200px",
-			margin:		"0",
-			padding:	"0",
-			width:		"200px"
+			border:		'none',
+			height:		'200px',
+			margin:		'0',
+			padding:	'0',
+			width:		'200px'
 		},
-		inner = $("<div>").css($.extend({}, css)),
-		outer = $("<div>").css($.extend({
-			left:		"-1000px",
-			overflow:	"scroll",
-			position:	"absolute",
-			top:		"-1000px"
-		}, css)).append(inner).appendTo("body").scrollLeft(1000).scrollTop(1000),
+		inner = $('<div>').css($.extend({}, css)),
+		outer = $('<div>').css($.extend({
+			left:		'-1000px',
+			overflow:	'scroll',
+			position:	'absolute',
+			top:		'-1000px'
+		}, css)).append(inner).appendTo('body').scrollLeft(1000).scrollTop(1000),
 		scrollSize = {
 			height:		(outer.offset().top - inner.offset().top) || 0,
 			width:		(outer.offset().left - inner.offset().left) || 0
@@ -117,9 +117,9 @@ export default function (selector, options)
 			if (_bar.active_timeout != undefined) {
 				clearTimeout(_bar.active_timeout);
 			}
-			_bar.addModifier("active");
+			_bar.addModifier('active');
 			_bar.active_timeout = setTimeout(function() {
-				_bar.removeModifier("active");
+				_bar.removeModifier('active');
 			}, 500);
 		};
 
@@ -127,11 +127,11 @@ export default function (selector, options)
 		{
       if (_bar.options.direction == 'vertical') {
         _bar.el.thumb.css({
-  				height: (_percentage * 100) + "%"
+  				height: (_percentage * 100) + '%'
   			});
       } else if (_bar.options.direction == 'horizontal') {
         _bar.el.thumb.css({
-  				width: (_percentage * 100) + "%"
+  				width: (_percentage * 100) + '%'
   			});
       }
 		};
@@ -148,7 +148,7 @@ export default function (selector, options)
 			if (!_bar.options.hasOwnProperty('size')) _bar.options.size = 'auto';
 
 			// create elements
-			_bar.el.thumb = _bar.addBlockElement("thumb");
+			_bar.el.thumb = _bar.addBlockElement('thumb');
 			_bar.append(_bar.el.thumb);
 			_bar.scroller.append(_bar);
 			$(_bar.el.thumb).draggable({
@@ -191,7 +191,7 @@ export default function (selector, options)
 
 		self.sizes = function() {
 			// reset forced padding 0
-			self.removeClass("scroller__container");
+			self.removeClass('scroller__container');
 
 			// get initial properties
 			self.prop.paddingTop = parseFloat(self.css('paddingTop'));
@@ -216,34 +216,34 @@ export default function (selector, options)
 			self.el.scroller.css(scrollerStyles);
 
 			// add container forced padding to 0
-			self.addClass("scroller__container");
+			self.addClass('scroller__container');
 
 			// check if scrollbar is needed
 			if (self.el.scrollbar != undefined) {
         if (self.options.direction == 'vertical' && Math.ceil(self.el.scroller.get(0).scrollHeight) > Math.ceil(self.el.scroller.outerHeight(false))) {
 					self.status.isScrollable = true;
-					self.addClass("is-scrollable");
+					self.addClass('is-scrollable');
 					self.el.scrollbar.show();
 					self.el.scrollbar.setVisiblePercentage(self.el.scroller.outerHeight(false) / self.el.scroller.get(0).scrollHeight);
-					self.trigger("scrollable", ["on"]);
+					self.trigger('scrollable', ['on']);
 				} else if (self.options.direction == 'horizontal' && Math.ceil(self.el.scroller.get(0).scrollWidth) > Math.ceil(self.el.scroller.outerWidth(false))) {
 					self.status.isScrollable = true;
-					self.addClass("is-scrollable");
+					self.addClass('is-scrollable');
 					self.el.scrollbar.show();
 					self.el.scrollbar.setVisiblePercentage(self.el.scroller.outerWidth(false) / self.el.scroller.get(0).scrollWidth);
-					self.trigger("scrollable", ["on"]);
+					self.trigger('scrollable', ['on']);
 				} else {
 					self.status.isScrollable = false;
-					self.removeClass("is-scrollable");
+					self.removeClass('is-scrollable');
 					self.el.scrollbar.hide();
-					self.trigger("scrollable", ["off"]);
+					self.trigger('scrollable', ['off']);
 				}
 			}
 		};
 
 		self.addScrollbar = function(options) {
-			self.el.scrollbar = self.el.scroller.addBlockElement("scrollbar").MLMI_Scrollbar(self, options);
-			self.el.scroller.on("scroll", self.scrolled);
+			self.el.scrollbar = self.el.scroller.addBlockElement('scrollbar').MLMI_Scrollbar(self, options);
+			self.el.scroller.on('scroll', self.scrolled);
 			self.sizes();
 			self.scrolled();
 			return self;
@@ -290,8 +290,8 @@ export default function (selector, options)
     self.kill = function() {
       self.el.scrollbar.kill();
       self.el.scrollbar = undefined;
-			$(window).off("load resize orientationchange", self.resizeTimeout);
-			self.removeClass("scroller__container is-scrollable");
+			$(window).off('load resize orientationchange', self.resizeTimeout);
+			self.removeClass('scroller__container is-scrollable');
       self.prepend(self.el.scroller.contents());
       self.el.scroller.remove();
       self.el.scroller = undefined;
@@ -311,7 +311,7 @@ export default function (selector, options)
 			self.append(self.el.scroller);
 
 			// resize element
-			$(window).on("load resize orientationchange", self.resizeTimeout);
+			$(window).on('load resize orientationchange', self.resizeTimeout);
 
 			// scroller object
 			return self;

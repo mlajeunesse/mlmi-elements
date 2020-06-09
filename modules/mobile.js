@@ -3,7 +3,7 @@
 */
 export default function (mobileSize) {
 
-  var obj = this;
+  let obj = this;
   this.isMobile = -1;
   this.mobileCallbacks = [];
   this.desktopCallbacks = [];
@@ -11,11 +11,11 @@ export default function (mobileSize) {
 
   /* Check mobile on resize */
   this.resized = function()	{
-		if ((obj.isMobile === -1 || !obj.isMobile) && "matchMedia" in window && window.matchMedia("(max-width: " + obj.mobileSize + "px)").matches){
+		if ((obj.isMobile === -1 || !obj.isMobile) && 'matchMedia' in window && window.matchMedia('(max-width: ' + obj.mobileSize + 'px)').matches) {
 			obj.isMobile = true;
       obj.callMobile();
       $(window).trigger('toggle');
-		} else if ((obj.isMobile === -1 || obj.isMobile) && "matchMedia" in window && window.matchMedia("(min-width: " + (obj.mobileSize + 1) + "px)").matches) {
+		} else if ((obj.isMobile === -1 || obj.isMobile) && 'matchMedia' in window && window.matchMedia('(min-width: ' + (obj.mobileSize + 1) + 'px)').matches) {
 			obj.isMobile = false;
       obj.callDesktop();
       $(window).trigger('toggle');
@@ -39,10 +39,10 @@ export default function (mobileSize) {
   this.addCallbacks = function(_mobileCallback, _desktopCallback, _autoRun) {
     obj.mobileCallbacks.push(_mobileCallback);
     obj.desktopCallbacks.push(_desktopCallback);
-    if (_autoRun === undefined || _autoRun == true){
-      if (obj.isMobile === true){
+    if (_autoRun === undefined || _autoRun == true) {
+      if (obj.isMobile === true) {
         obj.callMobile();
-      } else if (obj.isMobile === false){
+      } else if (obj.isMobile === false) {
         obj.callDesktop();
       }
     }
@@ -52,11 +52,11 @@ export default function (mobileSize) {
   this.kill = function() {
     this.mobileCallbacks = [];
     this.desktopCallbacks = [];
-    $(window).off("resize orientationchange load", obj.resized);
+    $(window).off('resize orientationchange load', obj.resized);
   };
 
   /* Initializer */
-  $(window).on("resize orientationchange load", obj.resized);
+  $(window).on('resize orientationchange load', obj.resized);
   obj.resized();
   return this;
 }

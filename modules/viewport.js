@@ -6,7 +6,7 @@ import Mobile from './mobile'
 export default function (options) {
 
   /* Default properties */
-  var obj = this
+  let obj = this
   this.elements = []
   this.mobileChecker = new Mobile()
   this.options = $.extend({
@@ -62,14 +62,14 @@ export default function (options) {
         }
         self.is_height_set = true
         self.css({
-          'min-height': targetHeight + "px",
-          'height': targetHeight + "px",
+          'min-height': targetHeight + 'px',
+          'height': targetHeight + 'px',
         })
       } else if (selfHeight > windowHeight) {
         self.is_height_set = true
         self.css({
-          'min-height': targetHeight + "px",
-          'height': targetHeight + "px",
+          'min-height': targetHeight + 'px',
+          'height': targetHeight + 'px',
         })
       }
 
@@ -80,12 +80,12 @@ export default function (options) {
     return function()
     {
       if (options.updateDynamically) {
-        $(window).on("load orientationchange resize", function() {
+        $(window).on('load orientationchange resize', function() {
           clearTimeout(self.check_timer)
           self.check_timer = setTimeout(self.check, 350)
         })
       }
-      self.find("img").on("load", function() {
+      self.find('img').on('load', function() {
         self.check()
       })
       self.check()
@@ -97,8 +97,8 @@ export default function (options) {
   this.update = function() {
     let obj = this
     $(this.options.selector).each(function() {
-      if (!$(this).data("element--viewport")) {
-        $(this).data("element--viewport", true)
+      if (!$(this).data('element--viewport')) {
+        $(this).data('element--viewport', true)
         let viewportElement = $(this).MLMI_ViewportHeight(obj.options)
         obj.elements.push(viewportElement)
       }
