@@ -55,6 +55,7 @@ $submit-padding : rem(8) !default;
   padding: $field-padding;
   border-radius: $field-border-radius;
   width: 100%;
+  color: inherit;
 
   @if $use-floating-labels == false {
     flex-direction: column;
@@ -68,6 +69,7 @@ $submit-padding : rem(8) !default;
     border: $input-border;
     padding: $input-padding;
     background-color: $input-background;
+    color: inherit;
 
     &:focus {
       border: $input-border-focus;
@@ -77,6 +79,12 @@ $submit-padding : rem(8) !default;
     &:active {
       border: $submit-border-active;
       background: $submit-background-active;
+    }
+
+    &:disabled {
+      pointer-events: none;
+      color: inherit;
+      opacity: 1;
     }
 
     @if $use-floating-labels == false {
@@ -102,10 +110,12 @@ $submit-padding : rem(8) !default;
   }
 
   &__submit {
+    user-select: none;
     display: block;
     border: $submit-border;
     background: $submit-background;
     padding: $submit-padding;
+    color: inherit;
 
     &:hover {
       border: $submit-border-hover;
@@ -120,6 +130,12 @@ $submit-padding : rem(8) !default;
     &:active {
       border: $submit-border-active;
       background: $submit-background-active;
+    }
+
+    &:disabled {
+      pointer-events: none;
+      color: inherit;
+      opacity: 1;
     }
   }
 
