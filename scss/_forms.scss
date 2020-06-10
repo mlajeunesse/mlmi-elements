@@ -1,9 +1,14 @@
+/*
+* Form elements
+*/
+
 $use-floating-labels : false !default;
 
 $field-padding : 0 !default;
 $field-border-radius : 0 !default;
 
-$input-border : 1px solid $black !default;
+$input-border-width : 1px;
+$input-border : $input-border-width solid $black !default;
 $input-border-focus : $input-border !default;
 $input-border-active : $input-border !default;
 $input-background : $white !default;
@@ -11,14 +16,15 @@ $input-background-focus : $input-background !default;
 $input-background-active : $input-background !default;
 $input-padding : rem(8) !default;
 
-$submit-border : 1px solid $black !default;
+$submit-border-width : 1px;
+$submit-border : $submit-border-width solid $black !default;
 $submit-border-hover : $submit-border !default;
 $submit-border-focus : $submit-border !default;
 $submit-border-active : $submit-border !default;
-$submit-background : $white !default;
+$submit-background : $input-background !default;
 $submit-background-hover : $submit-background !default;
-$submit-background-focus : $submit-background !default;
-$submit-background-active : $submit-background !default;
+$submit-background-focus : $input-background-focus !default;
+$submit-background-active : $input-background-active !default;
 $submit-padding : rem(8) !default;
 
 @mixin input-reset() {
@@ -77,8 +83,8 @@ $submit-padding : rem(8) !default;
     }
 
     &:active {
-      border: $submit-border-active;
-      background: $submit-background-active;
+      border: $input-border-active;
+      background: $input-background-active;
     }
 
     &:disabled {
@@ -87,6 +93,12 @@ $submit-padding : rem(8) !default;
       opacity: 1;
     }
 
+    @if $use-floating-labels == false {
+      order: 2;
+    }
+  }
+
+  .select {
     @if $use-floating-labels == false {
       order: 2;
     }
@@ -110,6 +122,7 @@ $submit-padding : rem(8) !default;
   }
 
   &__submit {
+    @include input-reset;
     user-select: none;
     display: block;
     border: $submit-border;
@@ -124,7 +137,7 @@ $submit-padding : rem(8) !default;
 
     &:focus {
       border: $submit-border-focus;
-      background: $submit-border-focus;
+      background: $submit-background-focus;
     }
 
     &:active {
@@ -154,4 +167,9 @@ $submit-padding : rem(8) !default;
 .field-error,
 .form-error {
   color: $danger;
+  transition: opacity 14.25s ease, visibility 14.25s ease;
+
+  &--remove {
+    display: none;
+  }
 }

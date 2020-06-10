@@ -1,4 +1,4 @@
-import { TRANSITION_END } from '../utils'
+import '../plugins/select'
 
 $.fn.Form = function(obj) {
   let self = this
@@ -35,9 +35,7 @@ $.fn.Form = function(obj) {
     self.el.submit.prop('disabled', true)
     self.el.inputs.prop('disabled', true)
     $('.field--invalid').removeClass('field--invalid')
-    $('.field__error').on(TRANSITION_END, function() {
-      $(this).remove()
-    }).addClass('field__error--remove')
+    $('.field-error').remove()
     $.post(obj.options.ajax_url, self.get_form_data(), self.handle_response, 'json')
   }
 
@@ -83,6 +81,11 @@ $.fn.Form = function(obj) {
     if (obj.options.use_ajax) {
       self.on('submit', self.handle_submit)
     }
+    if (obj.options.select_element) {
+      self.find('.field select').each(function() {
+        $(this).Select()
+      })
+    }
     self.data('form', self)
     return self
   }()
@@ -108,6 +111,7 @@ export default function (selector, options) {
     fields_selector: ':input',
     auto_scroll: true,
     auto_scroll_offset: 30,
+    select_element: true,
   }, options)
 
   /*

@@ -1,0 +1,113 @@
+/*
+*  Select element
+*/
+
+.select {
+  -webkit-touch-callout: none;
+  cursor: pointer;
+  display: block;
+  position: relative;
+  user-select: none;
+  color: inherit;
+
+  select {
+    display: none !important;
+  }
+
+  &__selected {
+    @include input-reset;
+    position: relative;
+    display: block;
+    width: 100%;
+    border: $input-border;
+    padding: $input-padding;
+    background-color: $input-background;
+
+    &::after {
+      content: '▾';
+      font-family: sans-serif;
+      display: block;
+      width: rem(12);
+      height: rem(12);
+      line-height: rem(12);
+      text-align: center;
+      position: absolute;
+      right: rem(20);
+      top: calc(50% - #{rem(6)});
+      transform: rotate(0deg);
+      pointer-events: none;
+    }
+
+    &:focus {
+      outline: 0;
+      border: $input-border-focus;
+      background-color: $input-background-focus;
+    }
+
+    &:active {
+      outline: 0;
+      border: $input-border-active;
+      background: $input-background-active;
+    }
+  }
+
+  &__options {
+    position: absolute;
+    display: none;
+    width: 100%;
+    border: $input-border;
+    background-color: $input-background;
+    z-index: 99;
+    overflow: hidden;
+
+    ul {
+      @include list-unstyled;
+      overflow: auto;
+      -webkit-overflow-scrolling: touch;
+      max-height: rem(160);
+      width: calc(100% + 40px);
+      padding-right: 40px;
+
+      li {
+        padding: $input-padding;
+        cursor: pointer;
+
+        &:focus {
+          background-color: $input-background-focus;
+          outline: 0;
+        }
+
+        &:active {
+          background-color: $input-background-active;
+          outline: 0;
+        }
+      }
+    }
+  }
+
+  &--opened:not(.select--upward) .select {
+    &__selected {
+      &::after {
+        transform: rotate(180deg);
+      }
+    }
+
+    &__options {
+      display: block;
+      top: calc(100% - #{$input-border-width});
+    }
+  }
+
+  &--opened.select--upward .select {
+    &__selected {
+      &::after {
+        transform: rotate(180deg);
+      }
+    }
+
+    &__options {
+      display: block;
+      bottom: calc(100% - #{$input-border-width});
+    }
+  }
+}
