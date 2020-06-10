@@ -1,4 +1,6 @@
 import '../plugins/select'
+import DatePickerFactory from 'jquery-datepicker'
+import DatePickerFactoryFR from 'jquery-datepicker/i18n/jquery.ui.datepicker-fr';
 
 $.fn.Form = function(obj) {
   let self = this
@@ -86,6 +88,16 @@ $.fn.Form = function(obj) {
         $(this).Select()
       })
     }
+    if (obj.options.date_picker) {
+      DatePickerFactory($);
+      $('.field--type-date_picker input').each(function() {
+        $(this).datepicker(obj.options.date_picker);
+        if (obj.options.locale == 'fr') {
+          DatePickerFactoryFR($)
+          $.datepicker.regional['fr']
+        }
+      })
+    }
     self.data('form', self)
     return self
   }()
@@ -105,6 +117,7 @@ export default function (selector, options) {
     options = {}
   }
   obj.options = $.extend({
+    locale: 'fr',
     use_ajax: true,
     ajax_url: '/wp/wp-admin/admin-ajax.php',
     ajax_redirect: true,
@@ -112,6 +125,8 @@ export default function (selector, options) {
     auto_scroll: true,
     auto_scroll_offset: 30,
     select_element: true,
+    date_picker: false,
+    time_picker: false,
   }, options)
 
   /*
