@@ -89,6 +89,11 @@ $.fn.Form = function(obj) {
       })
     }
     if (obj.options.date_picker) {
+      obj.options.date_picker = $.extend({
+        dateFormat: "yy-mm-dd",
+        nextText: '▶',
+        prevText: '◀',
+      }, obj.options.date_picker)
       DatePickerFactory($);
       $('.field--type-date_picker input').each(function() {
         $(this).datepicker(obj.options.date_picker);
@@ -126,7 +131,6 @@ export default function (selector, options) {
     auto_scroll_offset: 30,
     select_element: true,
     date_picker: false,
-    time_picker: false,
   }, options)
 
   /*
