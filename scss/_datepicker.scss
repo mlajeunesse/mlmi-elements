@@ -6,6 +6,7 @@
   user-select: none;
   width: 100%;
   max-width: rem(300);
+  display: none;
 
   &-title {
     text-align: center;
@@ -22,6 +23,11 @@
     line-height: rem(32);
     text-align: center;
     font-family: sans-serif;
+
+    &.ui-state-disabled {
+      opacity: .25;
+      pointer-events: none;
+    }
   }
 
   &-next {
@@ -35,6 +41,11 @@
     line-height: rem(32);
     text-align: center;
     font-family: sans-serif;
+
+    &.ui-state-disabled {
+      opacity: .25;
+      pointer-events: none;
+    }
   }
 
   &-month {
