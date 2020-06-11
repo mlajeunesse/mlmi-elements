@@ -1,6 +1,6 @@
 import '../plugins/select'
 import DatePickerFactory from 'jquery-datepicker'
-import DatePickerFactoryFR from 'jquery-datepicker/i18n/jquery.ui.datepicker-fr';
+import DatePickerFactoryFR from 'jquery-datepicker/i18n/jquery.ui.datepicker-fr'
 
 $.fn.Form = function(obj) {
   let self = this
@@ -25,7 +25,17 @@ $.fn.Form = function(obj) {
 
   self.get_form_value = function(fieldName) {
     let field = self.fields[fieldName]
-    if (field.attr('type') == 'number') {
+    if (Array.isArray(field)) {
+      let values = []
+      field.forEach(function(element) {
+        if (element.attr('type') == 'radio' && element.prop('checked')) {
+          values = element.val()
+        } else if (element.attr('type') == 'checkbox' && element.prop('checked')) {
+          values.push(element.val)
+        }
+      })
+      return values
+    } else if (field.attr('type') == 'number') {
       return parseInt(field.val(), 10)
     }
     return field.val()
@@ -76,7 +86,12 @@ $.fn.Form = function(obj) {
 
   return function() {
     self.el.inputs.each(function() {
-      if ($(this).attr('name')) {
+      if ($(this).attr('type') == 'radio' || $(this).attr('type') == 'checkbox') {
+        if (self.fields[$(this).attr('name')] == undefined) {
+          self.fields[$(this).attr('name')] = []
+        }
+        self.fields[$(this).attr('name')].push($(this))
+      } else if ($(this).attr('name')) {
         self.fields[$(this).attr('name')] = $(this)
       }
     })
@@ -94,9 +109,9 @@ $.fn.Form = function(obj) {
         nextText: '▶',
         prevText: '◀',
       }, obj.options.date_picker)
-      DatePickerFactory($);
+      DatePickerFactory($)
       $('.field--type-date_picker input').each(function() {
-        $(this).datepicker(obj.options.date_picker);
+        $(this).datepicker(obj.options.date_picker)
         if (obj.options.locale == 'fr') {
           DatePickerFactoryFR($)
           $.datepicker.regional['fr']
