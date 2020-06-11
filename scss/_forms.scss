@@ -7,8 +7,9 @@ $use-floating-labels : false !default;
 $field-padding : 0 !default;
 $field-border-radius : 0 !default;
 
-$input-border-width : 1px;
-$input-border : $input-border-width solid $black !default;
+$input-border-width : 1px !default;
+$input-border-color : $black !default;
+$input-border : $input-border-width solid $input-border-color !default;
 $input-border-focus : $input-border !default;
 $input-border-active : $input-border !default;
 $input-background : $white !default;
@@ -17,7 +18,7 @@ $input-background-active : $input-background !default;
 $input-padding : rem(8) !default;
 
 $submit-border-width : 1px;
-$submit-border : $submit-border-width solid $black !default;
+$submit-border : $submit-border-width solid $input-border-color !default;
 $submit-border-hover : $submit-border !default;
 $submit-border-focus : $submit-border !default;
 $submit-border-active : $submit-border !default;
@@ -26,6 +27,12 @@ $submit-background-hover : $submit-background !default;
 $submit-background-focus : $input-background-focus !default;
 $submit-background-active : $input-background-active !default;
 $submit-padding : rem(8) !default;
+
+$checkbox-width : rem(16) !default;
+$checkbox-dot-width : rem(8) !default;
+$checkbox-margin : rem(6) !default;
+$checkbox-border : $input-border !default;
+$checkbox-selected-border : $input-border-active !default;
 
 @mixin input-reset() {
   appearance: none;
@@ -67,7 +74,7 @@ $submit-padding : rem(8) !default;
     flex-direction: column;
   }
 
-  &__input:not([type='checkbox']) {
+  &__input:not([type='checkbox']):not([type='radio']) {
     @include input-reset;
     width: 100%;
     display: inline-block;
@@ -159,6 +166,58 @@ $submit-padding : rem(8) !default;
     .field {
       &__label {
         position: relative;
+      }
+    }
+  }
+
+  &--type-radio {
+    cursor: pointer;
+    flex-direction: row;
+    align-items: center;
+
+    .field {
+      &__input {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        transform: translateY(-50%);
+        opacity: 0;
+        width: $checkbox-width;
+        height: $checkbox-width;
+
+        + span {
+          position: relative;
+          display: inline-block;
+          border: $input-border;
+          background: $input-background;
+          width: $checkbox-width;
+          height: $checkbox-width;
+          margin-right: $checkbox-margin;
+          border-radius: 50%;
+
+          &::after {
+            content: '';
+            display: none;
+            width: $checkbox-dot-width;
+            height: $checkbox-dot-width;
+            background: $input-background;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+          }
+        }
+
+        &:checked {
+          + span {
+            background: $input-border-color;
+
+            &::after {
+              display: block;
+            }
+          }
+        }
       }
     }
   }
