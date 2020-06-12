@@ -81,6 +81,12 @@
           background-color: $input-background-active;
           outline: 0;
         }
+
+        &.disabled {
+          opacity: .25;
+          pointer-events: none;
+          cursor: default;
+        }
       }
     }
   }

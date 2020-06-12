@@ -128,7 +128,7 @@ $.fn.Form = function(obj) {
 
 export default function (selector, options) {
   let obj = this
-  obj.forms = []
+  obj.form = undefined
 
   /*
   * Default options
@@ -155,9 +155,12 @@ export default function (selector, options) {
   * Initializer
   */
   $(selector).each(function() {
-    let form = $(this).Form(obj)
-    obj.forms.push(form)
+    obj.form = $(this).Form(obj)
   })
+
+  obj.getForm = function() {
+    return obj.form
+  }
 
   return obj
 }

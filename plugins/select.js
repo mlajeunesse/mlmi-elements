@@ -7,8 +7,8 @@ $.fn.Select = function() {
   let $items = undefined
   self.is_multiple = self.prop('multiple')
 
-  if ($(this).data('$select')) {
-    return self.data('$select')
+  if ($(this).data('select')) {
+    return self.data('select')
   }
 
   self.initialize_markup = function() {
@@ -59,8 +59,12 @@ $.fn.Select = function() {
         let $option = $('<li tabindex="0"></li>')
         $option.text($(this).text())
         $option.data('value', $(this).val())
+        $option.data('option', $(this))
         if (self.is_multiple && $(this).prop('selected')) {
           $option.addClass('selected')
+        }
+        if ($(this).prop('disabled')) {
+          $option.addClass('disabled')
         }
         if ($(this).data('display')) {
           $option.data('display', $(this).data('display'))
@@ -243,7 +247,7 @@ $.fn.Select = function() {
       } else if (key == 38 || key == 37) {
         if ($select.hasClass('select--opened')) {
           if ($select.hasClass('select--upward')) {
-            $items.last().focus()
+            $items.filter(':not(.disabled)').last().focus()
           }
         }
       } else if (key == 40 || key == 39) {
@@ -251,7 +255,7 @@ $.fn.Select = function() {
           self.toggleSelect()
         }
         if (!$select.hasClass('select--upward')) {
-          $items.first().focus()
+          $items.filter(':not(.disabled)').first().focus()
         }
       }
     })
@@ -270,7 +274,7 @@ $.fn.Select = function() {
             $selected.focus()
           }
         } else {
-          $item.prev().focus()
+          $item.prevAll().filter(':not(.disabled)').first().focus()
         }
       } else if (key == 40 || key == 39) {
         if ($item.is(':last-child')) {
@@ -278,8 +282,24 @@ $.fn.Select = function() {
             $selected.focus()
           }
         } else {
-          $item.next().focus()
+          $item.nextAll().filter(':not(.disabled)').first().focus()
         }
+      }
+    })
+  }
+
+  self.update = function() {
+    /* Update selected text */
+    let selectedText = self.find('option:selected').data('display') ? self.find('option:selected').data('display') : self.find('option:selected').text()
+    $selected.text(selectedText)
+
+    /* Check for disabled options */
+    $items = $list.find('li')
+    $items.each(function() {
+      if ($(this).data('option').prop('disabled')) {
+        $(this).addClass('disabled');
+      } else {
+        $(this).removeClass('disabled');
       }
     })
   }
@@ -288,6 +308,7 @@ $.fn.Select = function() {
     self.initialize_markup()
     self.initialize_events()
     self.initialize_keys()
+    self.on('change', self.update)
     self.data('select', self)
     return self
   }()
