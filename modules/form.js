@@ -47,7 +47,7 @@ $.fn.Form = function(obj) {
     self.el.submit.prop('disabled', true)
     self.el.inputs.prop('disabled', true)
     $('.field--invalid').removeClass('field--invalid')
-    $('.field-error').remove()
+    $('.field-error, .form-error').remove()
     $.post(obj.options.ajax_url, self.get_form_data(), self.handle_response, 'json')
   }
 
@@ -69,6 +69,9 @@ $.fn.Form = function(obj) {
     self.el.fields.removeClass('field--disabled')
     self.el.inputs.prop('disabled', false)
     self.el.submit.prop('disabled', false)
+    if (response.error != undefined) {
+      self.prepend($(response.error))
+    }
     for (let fieldName in response.errors) {
       let input = self.fields[fieldName],
       field = $(input).parents('.field').addClass('field--invalid')

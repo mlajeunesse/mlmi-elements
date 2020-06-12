@@ -5,17 +5,47 @@ $.fn.Select = function() {
   let $options = undefined
   let $list = undefined
   let $items = undefined
+  self.is_multiple = self.prop('multiple')
+
+  if ($(this).data('$select')) {
+    return self.data('$select')
+  }
 
   self.initialize_markup = function() {
-    // Wrap select element
+    // Wrap .select element
     self.removeClass('select')
     self.wrap('<div class="select"></div>')
     $select = self.parents('.select')
 
+    // Multiple
+    if (self.is_multiple) {
+      $select.addClass('select--multiple')
+    }
+
     // Add selected element
     $selected = $('<span class="select__selected" tabindex="0"></span>')
-    $selected.text(self.find('option:first').text())
+    if (self.is_multiple) {
+      let multipleString = ''
+      let multipleSelected = self.find("option:selected")
+      multipleSelected.each(function(index) {
+        multipleString += $(this).data('display') ? $(this).data('display') : $(this).text()
+        if (index < multipleSelected.length - 2) {
+          multipleString += ', '
+        } else if (index == multipleSelected.length - 2) {
+          multipleString += ' & '
+        }
+      })
+      $selected.text(multipleString)
+    } else {
+      let selectedText = self.find('option:selected').data('display') ? self.find('option:selected').data('display') : self.find('option:selected').text()
+      $selected.text(selectedText)
+    }
     $select.prepend($selected)
+    if (self.find('option:selected').val()) {
+      $select.removeClass('select--empty')
+    } else {
+      $select.addClass('select--empty')
+    }
 
     // Add options element
     $options = $('<div class="select__options"></div>')
@@ -29,7 +59,15 @@ $.fn.Select = function() {
         let $option = $('<li tabindex="0"></li>')
         $option.text($(this).text())
         $option.data('value', $(this).val())
-        $list.append($option)
+        if (self.is_multiple && $(this).prop('selected')) {
+          $option.addClass('selected')
+        }
+        if ($(this).data('display')) {
+          $option.data('display', $(this).data('display'))
+        }
+        if ($(this).val()) {
+          $list.append($option)
+        }
       }
     })
 
@@ -46,7 +84,7 @@ $.fn.Select = function() {
       self.selectValue($(e.target))
     })
 
-    self.on('click', function(e) {
+    $select.on('click', function(e) {
       if ($(e.target).parents('.select').length === 1) {
         e.stopPropagation()
         $('.select').not($select).removeClass('select--opened')
@@ -68,7 +106,7 @@ $.fn.Select = function() {
       $selected.focus()
     } else {
       // close all opened elements
-      $('.select--opened').each(function() {
+      $('select--opened').each(function() {
         $(this).blur().removeClass('select--opened')
       })
 
@@ -102,12 +140,82 @@ $.fn.Select = function() {
     return $selectedItem
   }
 
+  self.setValue = function(newValue) {
+    self.val(newValue);
+    self.change()
+    let selectedText = self.find('option:selected').data('display') ? self.find('option:selected').data('display') : self.find('option:selected').text()
+    $selected.text(selectedText)
+  }
+
   self.selectValue = function(item) {
     const value = item.data('value')
-    self.find('option[value="' + value + '"]').prop('selected', true)
+    if (self.is_multiple) {
+      let formerValues = self.val()
+      if (formerValues.indexOf(value) !== -1) {
+        formerValues.splice(formerValues.indexOf(value), 1)
+        self.find('option[value="' + value + '"]').prop('selected', false)
+      } else {
+        self.find('option[value="' + value + '"]').prop('selected', true)
+      }
+    } else {
+      self.find('option[value="' + value + '"]').prop('selected', true)
+    }
+    if (self.is_multiple) {
+      let values = self.val()
+      if (values == null || !values.length) {
+        values = [""]
+      }
+      if (value == "none") {
+        values = ["none"]
+      } else {
+        let emptyIndex = values.indexOf("")
+        if (emptyIndex !== -1) {
+          values.splice(emptyIndex, 1)
+        }
+        let noneIndex = values.indexOf("none")
+        if (noneIndex !== -1) {
+          values.splice(noneIndex, 1)
+        }
+      }
+      if (!values.length) {
+        values = [""]
+      }
+      self.val(values)
+      $options.find('li').each(function() {
+        if (values.indexOf($(this).data('value')) === -1) {
+          $(this).removeClass('selected')
+        } else {
+          $(this).addClass('selected')
+        }
+      })
+      if (values.length == 1 && values[0] == "") {
+        $selected.text(self.find("option:first").text())
+        $select.addClass('select--empty')
+      } else {
+        let multipleString = ''
+        let multipleSelected = self.find("option:selected")
+        multipleSelected.each(function(index) {
+          multipleString += $(this).data('display') ? $(this).data('display') : $(this).text()
+          if (index < multipleSelected.length - 2) {
+            multipleString += ', '
+          } else if (index == multipleSelected.length - 2) {
+            multipleString += ' & '
+          }
+        })
+        $selected.text(multipleString)
+        $select.removeClass('select--empty')
+      }
+    } else {
+      $select.removeClass('select--opened')
+      let itemText = item.data('display') ? item.data('display') : item.text()
+      $selected.text(itemText)
+      if (value) {
+        $select.removeClass('select--empty')
+      } else {
+        $select.addClass('select--empty')
+      }
+    }
     self.trigger('change')
-    $select.removeClass('select--opened')
-    $selected.text(item.text())
   }
 
   self.initialize_keys = function() {
@@ -176,17 +284,11 @@ $.fn.Select = function() {
     })
   }
 
-  self.initialize_selection = function() {
-    if (self.val()) {
-      $selected.text(self.getSelectedItem().text())
-    }
-  }
-
   return function() {
     self.initialize_markup()
     self.initialize_events()
     self.initialize_keys()
-    self.initialize_selection()
+    self.data('select', self)
     return self
   }()
 }
