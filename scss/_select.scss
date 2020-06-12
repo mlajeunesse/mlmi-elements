@@ -116,4 +116,9 @@
       bottom: calc(100% - #{$input-border-width});
     }
   }
+
+  &.disabled {
+    pointer-events: none;
+    opacity: .75;
+  }
 }

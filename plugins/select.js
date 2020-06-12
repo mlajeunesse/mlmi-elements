@@ -302,6 +302,13 @@ $.fn.Select = function() {
         $(this).removeClass('disabled');
       }
     })
+
+    /* Check for disabled field */
+    if (self.prop('disabled')) {
+      $select.addClass('disabled')
+    } else {
+      $select.removeClass('disabled')
+    }
   }
 
   return function() {

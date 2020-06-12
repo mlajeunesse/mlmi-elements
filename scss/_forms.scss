@@ -97,7 +97,7 @@ $checkbox-selected-border : $input-border-active !default;
     &:disabled {
       pointer-events: none;
       color: inherit;
-      opacity: 1;
+      opacity: .75;
     }
 
     @if $use-floating-labels == false {
@@ -155,7 +155,7 @@ $checkbox-selected-border : $input-border-active !default;
     &:disabled {
       pointer-events: none;
       color: inherit;
-      opacity: 1;
+      opacity: .75;
     }
   }
 
