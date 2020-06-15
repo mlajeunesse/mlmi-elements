@@ -2,6 +2,22 @@
 *  Select element
 */
 
+$select-border-width: 1px !default;
+$select-border: $input-border !default;
+$select-border-focus: $input-border-focus !default;
+$select-border-active: $input-border-active !default;
+$select-padding: $input-padding !default;
+$select-background: $input-background !default;
+$select-background-focus: $input-background-focus !default;
+$select-background-active: $input-background-active !default;
+
+$select-options-border-width: 1px !default;
+$select-options-border: $select-border !default;
+$select-options-background: $select-background !default;
+$select-options-background-focus: $select-options-background !default;
+$select-options-background-active: $select-options-background !default;
+$select-options-padding: $select-padding !default;
+
 .select {
   -webkit-touch-callout: none;
   cursor: pointer;
@@ -19,9 +35,9 @@
     position: relative;
     display: block;
     width: 100%;
-    border: $input-border;
-    padding: $input-padding;
-    background-color: $input-background;
+    border: $select-border;
+    padding: $select-padding;
+    background-color: $select-background;
 
     &::after {
       content: '▾';
@@ -40,14 +56,14 @@
 
     &:focus {
       outline: 0;
-      border: $input-border-focus;
-      background-color: $input-background-focus;
+      border: $select-border-focus;
+      background-color: $select-background-focus;
     }
 
     &:active {
       outline: 0;
-      border: $input-border-active;
-      background: $input-background-active;
+      border: $select-border-active;
+      background: $select-background-active;
     }
   }
 
@@ -55,8 +71,8 @@
     position: absolute;
     display: none;
     width: 100%;
-    border: $input-border;
-    background-color: $input-background;
+    border: $select-options-border;
+    background-color: $select-options-background;
     z-index: 99;
     overflow: hidden;
 
@@ -69,16 +85,17 @@
       padding-right: 40px;
 
       li {
-        padding: $input-padding;
+        padding: $select-options-padding;
         cursor: pointer;
 
-        &:focus {
-          background-color: $input-background-focus;
+        &:focus,
+        &:hover {
+          background-color: $select-options-background-focus;
           outline: 0;
         }
 
         &:active {
-          background-color: $input-background-active;
+          background-color: $select-options-background-active;
           outline: 0;
         }
 
@@ -100,7 +117,7 @@
 
     &__options {
       display: block;
-      top: calc(100% - #{$input-border-width});
+      top: calc(100% - #{$select-options-border-width});
     }
   }
 
@@ -113,7 +130,7 @@
 
     &__options {
       display: block;
-      bottom: calc(100% - #{$input-border-width});
+      bottom: calc(100% - #{$select-options-border-width});
     }
   }
 
