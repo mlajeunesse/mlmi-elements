@@ -226,6 +226,24 @@ $checkbox-selected-border: $checkbox-border !default;
   }
 }
 
+.field-options {
+  &--horizontal {
+    display: flex;
+    flex-direction: row;
+    margin-top: rem(6);
+
+    .field--type-radio,
+    .field--type-checkbox {
+      width: auto;
+
+      + .field--type-radio,
+      + .field--type-checkbox {
+        margin-left: 1rem;
+      }
+    }
+  }
+}
+
 .field-error,
 .form-error {
   color: $danger;

@@ -145,8 +145,8 @@ $.fn.Select = function() {
   }
 
   self.setValue = function(newValue) {
-    self.val(newValue);
-    self.change()
+    self.val(newValue)
+    self.trigger('change')
     let selectedText = self.find('option:selected').data('display') ? self.find('option:selected').data('display') : self.find('option:selected').text()
     $selected.text(selectedText)
   }
@@ -288,7 +288,7 @@ $.fn.Select = function() {
     })
   }
 
-  self.update = function() {
+  self.update_element = function() {
     /* Update selected text */
     let selectedText = self.find('option:selected').data('display') ? self.find('option:selected').data('display') : self.find('option:selected').text()
     $selected.text(selectedText)
@@ -297,9 +297,9 @@ $.fn.Select = function() {
     $items = $list.find('li')
     $items.each(function() {
       if ($(this).data('option').prop('disabled')) {
-        $(this).addClass('disabled');
+        $(this).addClass('disabled')
       } else {
-        $(this).removeClass('disabled');
+        $(this).removeClass('disabled')
       }
     })
 
@@ -311,11 +311,14 @@ $.fn.Select = function() {
     }
   }
 
+  self.getSelect = function() {
+    return $select
+  }
+
   return function() {
     self.initialize_markup()
     self.initialize_events()
     self.initialize_keys()
-    self.on('change', self.update)
     self.data('select', self)
     return self
   }()
