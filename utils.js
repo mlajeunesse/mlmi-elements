@@ -62,3 +62,19 @@ export function formatDate(date) {
   if (day.length < 2) day = '0' + day;
   return [year, month, day].join('-');
 }
+
+export let decodeEntities = (function() {
+  let element = document.createElement('div');
+
+  function decodeHTMLEntities (str) {
+    if(str && typeof str === 'string') {
+      str = str.replace(/<script[^>]*>([\S\s]*?)<\/script>/gmi, '');
+      str = str.replace(/<\/?\w(?:[^"'>]|"[^"]*"|'[^']*')*>/gmi, '');
+      element.innerHTML = str;
+      str = element.textContent;
+      element.textContent = '';
+    }
+    return str;
+  }
+  return decodeHTMLEntities;
+})();

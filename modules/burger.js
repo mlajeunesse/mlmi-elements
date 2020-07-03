@@ -55,9 +55,9 @@ export default function (selector, options) {
 }
 
 /*
-<button class='burger' aria-label='<?php _e('Navigation', 'mlmi') ?>' aria-expanded='false' aria-controls='navigation'>
-  <div class='burger__el burger__el--top'></div>
-  <div class='burger__el burger__el--middle'></div>
-  <div class='burger__el burger__el--bottom'></div>
+<button class="burger" aria-label="<?php _e("Navigation", "mlmi") ?>" aria-expanded="false" aria-controls="navigation">
+  <div class="burger__el burger__el--top"></div>
+  <div class="burger__el burger__el--middle"></div>
+  <div class="burger__el burger__el--bottom"></div>
 </button>
 */
