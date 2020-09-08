@@ -2,7 +2,6 @@
 * Toggling Mobile and Desktop
 */
 export default function (mobileSize) {
-
   let obj = this;
   this.isMobile = -1;
   this.mobileCallbacks = [];
@@ -41,9 +40,9 @@ export default function (mobileSize) {
     obj.desktopCallbacks.push(_desktopCallback);
     if (_autoRun === undefined || _autoRun == true) {
       if (obj.isMobile === true) {
-        obj.callMobile();
+        _mobileCallback()
       } else if (obj.isMobile === false) {
-        obj.callDesktop();
+        _desktopCallback()
       }
     }
     return obj;
