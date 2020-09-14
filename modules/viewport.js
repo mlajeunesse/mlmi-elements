@@ -14,6 +14,7 @@ export default function (options) {
     inner: undefined,
     innerMinHeight: true,
     updateDynamically: true,
+    force: false,
     desktop: true,
     mobile: true,
   }, options)
@@ -65,7 +66,7 @@ export default function (options) {
           'min-height': targetHeight + 'px',
           'height': targetHeight + 'px',
         })
-      } else if (selfHeight > windowHeight) {
+      } else if (selfHeight > windowHeight || options.force) {
         self.is_height_set = true
         self.css({
           'min-height': targetHeight + 'px',
