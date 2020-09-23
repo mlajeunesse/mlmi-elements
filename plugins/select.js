@@ -1,3 +1,6 @@
+/*
+* Select element
+*/
 $.fn.Select = function() {
   let self = this
   let $select = undefined
