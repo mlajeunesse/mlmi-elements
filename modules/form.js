@@ -28,10 +28,12 @@ $.fn.Form = function(obj) {
     if (Array.isArray(field)) {
       let values = []
       field.forEach(function(element) {
-        if (element.attr('type') == 'radio' && element.prop('checked')) {
+        if (element.attr('type') == 'checkbox' && element.closest('.field').hasClass('field--type-true_false') && element.prop('checked')) {
+          values = element.val()
+        } else if (element.attr('type') == 'radio' && element.prop('checked')) {
           values = element.val()
         } else if (element.attr('type') == 'checkbox' && element.prop('checked')) {
-          values.push(element.val)
+          values.push(element.val())
         }
       })
       return values
@@ -49,6 +51,9 @@ $.fn.Form = function(obj) {
     $('.field--invalid').removeClass('field--invalid')
     $('.field-error, .form-error').remove()
     $.post(obj.options.ajax_url, self.get_form_data(), self.handle_response, 'json')
+    if (obj.options.onSubmit != undefined) {
+      obj.options.onSubmit()
+    }
   }
 
   self.handle_response = function(response) {
@@ -62,13 +67,13 @@ $.fn.Form = function(obj) {
   self.handle_success = function(response) {
     if (obj.options.ajax_redirect && response.redirect) {
       location.href = response.redirect
+    } else if (obj.options.onSuccess != undefined) {
+      obj.options.onSuccess(response)
     }
   }
 
   self.handle_error = function(response) {
-    self.el.fields.removeClass('field--disabled')
-    self.el.inputs.prop('disabled', false)
-    self.el.submit.prop('disabled', false)
+    self.enable_fields()
     if (response.error != undefined) {
       self.prepend($(response.error))
     }
@@ -85,6 +90,15 @@ $.fn.Form = function(obj) {
         }, 450)
       }
     }
+    if (obj.options.onError != undefined) {
+      obj.options.onError(response)
+    }
+  }
+
+  self.enable_fields = function() {
+    self.el.fields.removeClass('field--disabled')
+    self.el.inputs.prop('disabled', false)
+    self.el.submit.prop('disabled', false)
   }
 
   return function() {
@@ -149,6 +163,9 @@ export default function (selector, options) {
     auto_scroll_offset: 30,
     select_element: true,
     date_picker: false,
+    onSubmit: undefined,
+    onSuccess: undefined,
+    onError: undefined,
   }, options)
 
   /*
