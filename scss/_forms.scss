@@ -31,10 +31,15 @@ $submit-padding : rem(8) !default;
 $checkbox-width : rem(16) !default;
 $checkbox-dot-width : rem(8) !default;
 $checkbox-margin : rem(6) !default;
+$checkbox-margin-left: rem(16) !default;
 $checkbox-border : $input-border !default;
 $checkbox-background : $input-background !default;
 $checkbox-selected-background : $input-background-active !default;
 $checkbox-selected-border: $checkbox-border !default;
+$checkbox-focus-background: $input-background-active !default;
+$checkbox-focus-border: $checkbox-border !default;
+$checkbox-focus-selected-background: $input-background-active !default;
+$checkbox-focus-selected-border: $checkbox-focus-border !default;
 
 @mixin input-reset() {
   appearance: none;
@@ -161,17 +166,8 @@ $checkbox-selected-border: $checkbox-border !default;
     }
   }
 
-  &--type-true_false {
-    flex-direction: row;
-    align-items: center;
-
-    .field {
-      &__label {
-        position: relative;
-      }
-    }
-  }
-
+  &--type-true_false,
+  &--type-checkbox,
   &--type-radio {
     cursor: pointer;
     flex-direction: row;
@@ -186,6 +182,7 @@ $checkbox-selected-border: $checkbox-border !default;
         opacity: 0;
         width: $checkbox-width;
         height: $checkbox-width;
+        pointer-events: none;
 
         + span {
           position: relative;
@@ -195,7 +192,7 @@ $checkbox-selected-border: $checkbox-border !default;
           width: $checkbox-width;
           height: $checkbox-width;
           margin-right: $checkbox-margin;
-          border-radius: 50%;
+          flex-shrink: 0;
 
           &::after {
             content: '';
@@ -221,6 +218,38 @@ $checkbox-selected-border: $checkbox-border !default;
             }
           }
         }
+
+        &:focus {
+          + span {
+            border: $checkbox-focus-border;
+            background: $checkbox-focus-background;
+          }
+
+          &::after {
+            display: block;
+          }
+        }
+
+        &:focus:checked {
+          + span {
+            border: $checkbox-focus-selected-border;
+            background: $checkbox-focus-selected-background;
+          }
+
+          &::after {
+            display: block;
+          }
+        }
+      }
+    }
+  }
+
+  &--type-radio {
+    .field {
+      &__input {
+        + span {
+          border-radius: 50%;
+        }
       }
     }
   }
@@ -228,17 +257,21 @@ $checkbox-selected-border: $checkbox-border !default;
 
 .field-options {
   &--horizontal {
-    display: flex;
-    flex-direction: row;
-    margin-top: rem(6);
+    @include media-breakpoint-up(md) {
+      display: flex;
+      flex-direction: row;
+      flex-flow: wrap;
+      margin-top: rem(6);
 
-    .field--type-radio,
-    .field--type-checkbox {
-      width: auto;
+      .field--type-radio,
+      .field--type-checkbox {
+        width: auto;
+        margin-right: $checkbox-margin-left;
+        margin-left: 0;
 
-      + .field--type-radio,
-      + .field--type-checkbox {
-        margin-left: 1rem;
+        &:last-child {
+          margin-right: 0;
+        }
       }
     }
   }
