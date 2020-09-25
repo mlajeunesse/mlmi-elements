@@ -28,8 +28,8 @@ $.fn.Form = function(obj) {
     if (Array.isArray(field)) {
       let values = []
       field.forEach(function(element) {
-        if (element.attr('type') == 'checkbox' && element.closest('.field').hasClass('field--type-true_false') && element.prop('checked')) {
-          values = element.val()
+        if (element.attr('type') == 'checkbox' && element.closest('.field').hasClass('field--type-true_false')) {
+          values = element.prop('checked') ? element.val() : false
         } else if (element.attr('type') == 'radio' && element.prop('checked')) {
           values = element.val()
         } else if (element.attr('type') == 'checkbox' && element.prop('checked')) {
