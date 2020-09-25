@@ -29,7 +29,7 @@ $.fn.Form = function(obj) {
       let values = []
       field.forEach(function(element) {
         if (element.attr('type') == 'checkbox' && element.closest('.field').hasClass('field--type-true_false')) {
-          values = element.prop('checked') ? element.val() : false
+          values = element.prop('checked') ? element.val() : 0
         } else if (element.attr('type') == 'radio' && element.prop('checked')) {
           values = element.val()
         } else if (element.attr('type') == 'checkbox' && element.prop('checked')) {
@@ -48,6 +48,7 @@ $.fn.Form = function(obj) {
     self.el.fields.addClass('field--disabled')
     self.el.submit.prop('disabled', true)
     self.el.inputs.prop('disabled', true)
+    self.addClass('--submitting')
     $('.field--invalid').removeClass('field--invalid')
     $('.field-error, .form-error').remove()
     $.post(obj.options.ajax_url, self.get_form_data(), self.handle_response, 'json')
@@ -57,6 +58,7 @@ $.fn.Form = function(obj) {
   }
 
   self.handle_response = function(response) {
+    self.removeClass('--submitting')
     if (response.success) {
       self.handle_success(response)
     } else {

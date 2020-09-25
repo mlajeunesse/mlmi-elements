@@ -11,6 +11,7 @@ $select-background: $input-background !default;
 $select-background-focus: $input-background-focus !default;
 $select-background-active: $input-background-active !default;
 
+$select-options-max-height: rem(160) !default;
 $select-options-border-width: 1px !default;
 $select-options-border: $select-border !default;
 $select-options-background: $select-background !default;
@@ -80,7 +81,7 @@ $select-options-padding: $select-padding !default;
       @include list-unstyled;
       overflow: auto;
       -webkit-overflow-scrolling: touch;
-      max-height: rem(160);
+      max-height: $select-options-max-height;
       width: calc(100% + 40px);
       padding-right: 40px;
 
