@@ -69,6 +69,101 @@ $checkbox-focus-selected-border: $checkbox-focus-border !default;
   }
 }
 
+@mixin form-input {
+  @include input-reset;
+  width: 100%;
+  display: inline-block;
+  vertical-align: middle;
+  border: $input-border;
+  padding: $input-padding;
+  background-color: $input-background;
+  color: inherit;
+
+  &:focus {
+    border: $input-border-focus;
+    background-color: $input-background-focus;
+  }
+
+  &:active {
+    border: $input-border-active;
+    background: $input-background-active;
+  }
+
+  &:disabled {
+    pointer-events: none;
+    color: inherit;
+    opacity: .75;
+  }
+}
+
+@mixin form-checkbox {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  opacity: 0;
+  width: $checkbox-width;
+  height: $checkbox-width;
+  pointer-events: none;
+
+  + span {
+    position: relative;
+    display: inline-block;
+    border: $input-border;
+    background: $input-background;
+    width: $checkbox-width;
+    height: $checkbox-width;
+    margin-right: $checkbox-margin;
+    flex-shrink: 0;
+
+    &::after {
+      content: '';
+      display: none;
+      width: $checkbox-dot-width;
+      height: $checkbox-dot-width;
+      background: $input-background;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+    }
+  }
+
+  &:checked {
+    + span {
+      border: $checkbox-selected-border;
+      background: $checkbox-selected-background;
+
+      &::after {
+        display: block;
+      }
+    }
+  }
+
+  &:focus {
+    + span {
+      border: $checkbox-focus-border;
+      background: $checkbox-focus-background;
+    }
+
+    &::after {
+      display: block;
+    }
+  }
+
+  &:focus:checked {
+    + span {
+      border: $checkbox-focus-selected-border;
+      background: $checkbox-focus-selected-background;
+    }
+
+    &::after {
+      display: block;
+    }
+  }
+}
+
 .field {
   display: flex;
   position: relative;
@@ -82,30 +177,7 @@ $checkbox-focus-selected-border: $checkbox-focus-border !default;
   }
 
   &__input:not([type='checkbox']):not([type='radio']) {
-    @include input-reset;
-    width: 100%;
-    display: inline-block;
-    vertical-align: middle;
-    border: $input-border;
-    padding: $input-padding;
-    background-color: $input-background;
-    color: inherit;
-
-    &:focus {
-      border: $input-border-focus;
-      background-color: $input-background-focus;
-    }
-
-    &:active {
-      border: $input-border-active;
-      background: $input-background-active;
-    }
-
-    &:disabled {
-      pointer-events: none;
-      color: inherit;
-      opacity: .75;
-    }
+    @include form-input();
 
     @if $use-floating-labels == false {
       order: 2;
@@ -175,71 +247,7 @@ $checkbox-focus-selected-border: $checkbox-focus-border !default;
 
     .field {
       &__input {
-        position: absolute;
-        top: 50%;
-        left: 0;
-        transform: translateY(-50%);
-        opacity: 0;
-        width: $checkbox-width;
-        height: $checkbox-width;
-        pointer-events: none;
-
-        + span {
-          position: relative;
-          display: inline-block;
-          border: $input-border;
-          background: $input-background;
-          width: $checkbox-width;
-          height: $checkbox-width;
-          margin-right: $checkbox-margin;
-          flex-shrink: 0;
-
-          &::after {
-            content: '';
-            display: none;
-            width: $checkbox-dot-width;
-            height: $checkbox-dot-width;
-            background: $input-background;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            border-radius: 50%;
-          }
-        }
-
-        &:checked {
-          + span {
-            border: $checkbox-selected-border;
-            background: $checkbox-selected-background;
-
-            &::after {
-              display: block;
-            }
-          }
-        }
-
-        &:focus {
-          + span {
-            border: $checkbox-focus-border;
-            background: $checkbox-focus-background;
-          }
-
-          &::after {
-            display: block;
-          }
-        }
-
-        &:focus:checked {
-          + span {
-            border: $checkbox-focus-selected-border;
-            background: $checkbox-focus-selected-background;
-          }
-
-          &::after {
-            display: block;
-          }
-        }
+        @include form-checkbox;
       }
     }
   }
