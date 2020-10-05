@@ -1,5 +1,7 @@
-import Swiper from 'swiper/js/swiper';
+import Swiper, { Navigation, Pagination } from 'swiper'
 import Mobile from './mobile';
+
+Swiper.use([Navigation, Pagination]);
 
 export default function(element, swiper_options, options) {
   let self = $(this)
