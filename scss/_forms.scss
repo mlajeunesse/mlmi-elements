@@ -96,6 +96,22 @@ $checkbox-focus-selected-border: $checkbox-focus-border !default;
   }
 }
 
+@mixin form-input-override {
+  border: $input-border;
+  padding: $input-padding;
+  background-color: $input-background;
+
+  &:focus {
+    border: $input-border-focus;
+    background-color: $input-background-focus;
+  }
+
+  &:active {
+    border: $input-border-active;
+    background: $input-background-active;
+  }
+}
+
 @mixin form-checkbox {
   position: absolute;
   top: 50%;
@@ -176,14 +192,11 @@ $checkbox-focus-selected-border: $checkbox-focus-border !default;
     flex-direction: column;
   }
 
-  &__input:not([type='checkbox']):not([type='radio']) {
+  &__input:not([type='checkbox']):not([type='radio']):not([type='file']) {
     @include form-input();
-
-    @if $use-floating-labels == false {
-      order: 2;
-    }
   }
 
+  &__input:not([type='checkbox']):not([type='radio']),
   .select {
     @if $use-floating-labels == false {
       order: 2;

@@ -19,7 +19,7 @@ $select-options-background-focus: $select-options-background !default;
 $select-options-background-active: $select-options-background !default;
 $select-options-padding: $select-padding !default;
 
-.select {
+@mixin select {
   -webkit-touch-callout: none;
   cursor: pointer;
   display: block;
@@ -139,4 +139,60 @@ $select-options-padding: $select-padding !default;
     pointer-events: none;
     opacity: .75;
   }
+}
+
+@mixin select-override {
+  &__selected {
+    border: $select-border;
+    padding: $select-padding;
+    background-color: $select-background;
+
+    &:focus {
+      border: $select-border-focus;
+      background-color: $select-background-focus;
+    }
+
+    &:active {
+      border: $select-border-active;
+      background: $select-background-active;
+    }
+  }
+
+  &__options {
+    border: $select-options-border;
+    background-color: $select-options-background;
+
+    ul {
+      max-height: $select-options-max-height;
+
+      li {
+        padding: $select-options-padding;
+
+        &:focus,
+        &:hover {
+          background-color: $select-options-background-focus;
+        }
+
+        &:active {
+          background-color: $select-options-background-active;
+        }
+      }
+    }
+  }
+
+  &--opened:not(.select--upward) .select {
+    &__options {
+      top: calc(100% - #{$select-options-border-width});
+    }
+  }
+
+  &--opened.select--upward .select {
+    &__options {
+      bottom: calc(100% - #{$select-options-border-width});
+    }
+  }
+}
+
+.select {
+  @include select;
 }
