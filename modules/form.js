@@ -16,16 +16,18 @@ $.fn.Form = function(obj) {
   }
 
   self.get_form_data = function() {
-    let data = {}
+    let data = new FormData()
     for (let fieldName in self.fields) {
-      data[fieldName] = self.get_form_value(fieldName)
+      data.append(fieldName, self.get_form_value(fieldName))
     }
     return data
   }
 
   self.get_form_value = function(fieldName) {
     let field = self.fields[fieldName]
-    if (Array.isArray(field)) {
+    if (field.attr('type') == 'file') {
+      return field.get(0).files[0];
+    } else if (Array.isArray(field)) {
       let values = []
       field.forEach(function(element) {
         if (element.attr('type') == 'checkbox' && element.closest('.field').hasClass('field--type-true_false')) {
@@ -51,7 +53,16 @@ $.fn.Form = function(obj) {
     self.addClass('--submitting')
     $('.field--invalid').removeClass('field--invalid')
     $('.field-error, .form-error').remove()
-    $.post(obj.options.ajax_url, self.get_form_data(), self.handle_response, 'json')
+    $.ajax({
+      url: obj.options.ajax_url,
+      type: 'POST',
+      enctype: self.attr('enctype') ? self.attr('enctype') : 'text/plain',
+      data: self.get_form_data(),
+      processData: false,
+      contentType: false,
+      cache: false,
+      success: self.handle_response,
+    })
     if (obj.options.onSubmit != undefined) {
       obj.options.onSubmit()
     }
