@@ -25,9 +25,7 @@ $.fn.Form = function(obj) {
 
   self.get_form_value = function(fieldName) {
     let field = self.fields[fieldName]
-    if (field.attr('type') == 'file') {
-      return field.get(0).files[0];
-    } else if (Array.isArray(field)) {
+    if (Array.isArray(field)) {
       let values = []
       field.forEach(function(element) {
         if (element.attr('type') == 'checkbox' && element.closest('.field').hasClass('field--type-true_false')) {
@@ -39,6 +37,8 @@ $.fn.Form = function(obj) {
         }
       })
       return values
+    } else if (field.attr('type') == 'file') {
+      return field.get(0).files[0];
     } else if (field.attr('type') == 'number') {
       return parseInt(field.val(), 10)
     }
