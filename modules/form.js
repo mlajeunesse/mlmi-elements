@@ -18,7 +18,15 @@ $.fn.Form = function(obj) {
   self.get_form_data = function() {
     let data = new FormData()
     for (let fieldName in self.fields) {
-      data.append(fieldName, self.get_form_value(fieldName))
+      let formValue = self.get_form_value(fieldName)
+      if (Array.isArray(formValue)) {
+        let strippedName = fieldName.replace('[]', '')
+        formValue.forEach(function(singleValue) {
+          data.append(strippedName + '[]', singleValue)
+        })
+      } else {
+        data.append(fieldName, self.get_form_value(fieldName))
+      }
     }
     return data
   }
@@ -38,7 +46,7 @@ $.fn.Form = function(obj) {
       })
       return values
     } else if (field.attr('type') == 'file') {
-      return field.get(0).files[0];
+      return field.get(0).files[0]
     } else if (field.attr('type') == 'number') {
       return parseInt(field.val(), 10)
     }
