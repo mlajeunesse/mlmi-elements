@@ -51,6 +51,10 @@ export default function (selector, options) {
     })
 	})
 
+  obj.click = function() {
+    $(selector).click()
+  }
+
   return obj
 }
 
