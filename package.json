@@ -1,15 +1,16 @@
 {
   "name": "mlmi-elements",
-  "version": "0.5.26",
+  "version": "0.5.27",
   "description": "Éléments MLMI",
   "author": "Mathieu Lajeunesse médias interactifs",
   "private": true,
   "main": "index.js",
   "dependencies": {
     "jquery": "^3.5.1",
+    "jquery-accessible-accordion-aria": "^2.6.1",
     "jquery-datepicker": "^1.12.3",
     "jquery-ui": "^1.12",
     "jquery-ui-touch-punch": "^0.2",
-    "swiper": "^6.3.3"
+    "swiper": "^6.3.4"
   }
 }
