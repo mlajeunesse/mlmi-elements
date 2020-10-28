@@ -301,7 +301,7 @@ $checkbox-focus-selected-border: $checkbox-focus-border !default;
 .field-error,
 .form-error {
   color: $danger;
-  transition: opacity 14.25s ease, visibility 14.25s ease;
+  transition: opacity .25s ease, visibility .25s ease;
 
   &--remove {
     display: none;

@@ -1,4 +1,5 @@
 import '../plugins/select'
+import '../plugins/floating-label'
 import DatePickerFactory from 'jquery-datepicker'
 import DatePickerFactoryFR from 'jquery-datepicker/i18n/jquery.ui.datepicker-fr'
 
@@ -60,7 +61,9 @@ $.fn.Form = function(obj) {
     self.el.inputs.prop('disabled', true)
     self.addClass('--submitting')
     $('.field--invalid').removeClass('field--invalid')
-    $('.field-error, .form-error').remove()
+    $('.field-error, .form-error').slideUp(180, function() {
+      $(this).remove()
+    })
     $.ajax({
       url: obj.options.ajax_url,
       type: 'POST',
@@ -136,6 +139,11 @@ $.fn.Form = function(obj) {
     if (obj.options.use_ajax) {
       self.on('submit', self.handle_submit)
     }
+    if (obj.options.floating_labels) {
+      self.find('.field').each(function() {
+        $(this).FloatingLabel()
+      })
+    }
     if (obj.options.select_element) {
       self.find('.field select').each(function() {
         $(this).Select()
@@ -182,6 +190,7 @@ export default function (selector, options) {
     fields_selector: ':input',
     auto_scroll: true,
     auto_scroll_offset: 30,
+    floating_labels: false,
     select_element: true,
     date_picker: false,
     onSubmit: undefined,

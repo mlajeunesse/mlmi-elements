@@ -17,8 +17,18 @@ $.fn.FloatingLabel = function() {
     }
   }
 
+  self.focused = function() {
+    self.addClass('field--focused')
+  }
+
+  self.blurred = function() {
+    self.removeClass('field--focused')
+  }
+
   return function() {
     self.field.on('change keypress keydown keyup', self.check)
+    self.field.on('focus', self.focused)
+    self.field.on('blur', self.blurred)
     $(window).on('load', self.check)
     self.check()
     return self
