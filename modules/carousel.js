@@ -9,12 +9,7 @@ export default function(element, swiper_options, options) {
   self.swiper = undefined
   self.wrapper = self.find('.swiper-wrapper')
   self.slides = self.find('.swiper-slide')
-
-  if (options == undefined) {
-    options = {}
-  }
-
-  options = $.extend(true, {
+  self.options = $.extend(true, {
     mobile: true,
     desktop: true,
     groupItems: {
@@ -37,16 +32,21 @@ export default function(element, swiper_options, options) {
   self.initialize = function() {
     self.wrapper.addClass('swiper-wrapper')
     self.slides.addClass('swiper-slide')
-    if (options.groupItems && self.getSlidesPerGroup()) {
+    if (self.options.groupItems && self.getSlidesPerGroup()) {
       while (self.find('.swiper-wrapper > .swiper-slide').length > 0) {
-        self.find('.swiper-wrapper > .swiper-slide:lt(' + self.getSlidesPerGroup() + ')').wrapAll($('<div class="' + options.groupItems.wrapperClass + '">'))
+        self.find('.swiper-wrapper > .swiper-slide:lt(' + self.getSlidesPerGroup() + ')').removeClass('swiper-slide').wrapAll($('<div class="' + self.options.groupItems.wrapperClass + '">'))
       }
-      self.slides.removeClass('swiper-slide')
-      $('.' + options.groupItems.wrapperClass).addClass('swiper-slide')
+      $('.' + self.options.groupItems.wrapperClass).addClass('swiper-slide')
     }
     self.swiper = new Swiper(element, swiper_options)
-    if (options.onInit != undefined) {
-      options.onInit(self)
+    if (self.options.onInit != undefined) {
+      self.options.onInit(self)
+    }
+  }
+
+  self.maybe_initialize = function() {
+    if (self.swiper == undefined && ((self.options.desktop && !self.mobile.isMobile) || (self.options.mobile && self.mobile.isMobile))) {
+      self.initialize()
     }
   }
 
@@ -61,46 +61,46 @@ export default function(element, swiper_options, options) {
       self.swiper.destroy()
       self.swiper = undefined
     }
-    if (options.groupItems) {
-      if (self.find('.' + options.groupItems.wrapperClass).length) {
-        self.slides.unwrap('.' + options.groupItems.wrapperClass)
+    if (self.options.groupItems) {
+      if (self.find('.' + self.options.groupItems.wrapperClass).length) {
+        self.slides.unwrap('.' + self.options.groupItems.wrapperClass)
       }
     }
-    if (options.onKill != undefined) {
-      options.onKill(self)
+    if (self.options.onKill != undefined) {
+      self.options.onKill(self)
     }
   }
 
   self.toggle_mobile = function() {
-    if (self.swiper != undefined && options.forceRebuild) {
+    if (self.swiper != undefined && self.options.forceRebuild) {
       self.kill()
     }
-    if (self.swiper == undefined && options.mobile) {
+    if (self.swiper == undefined && self.options.mobile) {
       self.initialize()
-    } else if (!options.mobile) {
+    } else if (!self.options.mobile) {
       self.kill()
     }
   }
 
   self.toggle_desktop = function() {
-    if (self.swiper != undefined && options.forceRebuild) {
+    if (self.swiper != undefined && self.options.forceRebuild) {
       self.kill()
     }
-    if (self.swiper == undefined && options.desktop) {
+    if (self.swiper == undefined && self.options.desktop) {
       self.initialize()
-    } else if (!options.desktop) {
+    } else if (!self.options.desktop) {
       self.kill()
     }
   }
 
   self.getSlidesPerGroup = function() {
-    if (options.groupItems && options.groupItems.slidesPerGroup) {
-      if (typeof options.groupItems.slidesPerGroup === 'number') {
-        return options.groupItems.slidesPerGroup
+    if (self.options.groupItems && self.options.groupItems.slidesPerGroup) {
+      if (typeof self.options.groupItems.slidesPerGroup === 'number') {
+        return self.options.groupItems.slidesPerGroup
       } else if (self.mobile.isMobile) {
-        return options.groupItems.slidesPerGroup.mobile ? options.groupItems.slidesPerGroup.mobile : false
+        return self.options.groupItems.slidesPerGroup.mobile ? self.options.groupItems.slidesPerGroup.mobile : false
       } else {
-        return options.groupItems.slidesPerGroup.desktop ? options.groupItems.slidesPerGroup.desktop : false
+        return self.options.groupItems.slidesPerGroup.desktop ? self.options.groupItems.slidesPerGroup.desktop : false
       }
     }
     return false
