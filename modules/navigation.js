@@ -23,7 +23,7 @@ export default function (options) {
   /*
   * Options
   */
-  this.options = $.extend({
+  this.options = $.extend(true, {
     init: true,
     useTransition: true,
     useEvents: true,
@@ -32,6 +32,9 @@ export default function (options) {
       pageContent: '.app',
       pageTarget: '.app',
     },
+    on: {
+      beforeRegisterLinks: undefined,
+    }
   }, options);
 
   /*
@@ -95,8 +98,7 @@ export default function (options) {
   /*
   *	Page transition
   */
-  this.getPage = function(href, callback)
-  {
+  this.getPage = function(href, callback) {
     // Keep current URL
     obj.currentURL = href;
 
@@ -161,8 +163,10 @@ export default function (options) {
   /*
   * Register links
   */
-  this.registerLinks = function()
-  {
+  this.registerLinks = function() {
+    if (obj.options.on.beforeRegisterLinks != undefined) {
+      obj.options.on.beforeRegisterLinks()
+    }
     $('a[target!="_blank"]').each(function() {
       if (!$(this).data('registeredTransitionLink')) {
         $(this).data('registeredTransitionLink', 1);
@@ -197,8 +201,7 @@ export default function (options) {
   /*
   * Initializer
   */
-  this.init = function()
-  {
+  this.init = function() {
     /* Pop state (back) */
     $(window).on('popstate', function(e) {
       let popState = e.originalEvent.state;
