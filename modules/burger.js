@@ -4,6 +4,7 @@
 
 export default function (selector, options) {
   let obj = this
+  this.burger = undefined
   this.isExpanded = false
 
   /*
@@ -43,8 +44,8 @@ export default function (selector, options) {
 
   /* Initializer */
 	$(selector).each(function() {
-    let burger = $(this).Burger()
-    burger.on('burger_clicked', function() {
+    obj.burger = $(this).Burger()
+    obj.burger.on('burger_clicked', function() {
       if (obj.options.onToggle != undefined) {
         obj.options.onToggle()
       }
@@ -53,6 +54,12 @@ export default function (selector, options) {
 
   obj.click = function() {
     $(selector).click()
+  }
+
+  obj.maybe_close = function() {
+    if (obj.burger != undefined) {
+      obj.burger.maybe_close()
+    }
   }
 
   return obj
