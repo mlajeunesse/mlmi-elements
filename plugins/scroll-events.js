@@ -40,6 +40,10 @@ $.fn.ScrollEvents = function() {
     })
   }
 
+  self.kill = function() {
+    self.off('scroll load orientationchange resize', self.scrolled)
+  }
+
   return function() {
     self.on('scroll load orientationchange resize', self.scrolled)
     return self
