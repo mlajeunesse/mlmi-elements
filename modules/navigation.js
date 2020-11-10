@@ -34,6 +34,7 @@ export default function (options) {
     },
     on: {
       beforeRegisterLinks: undefined,
+      linkClicked: undefined,
     }
   }, options);
 
@@ -170,7 +171,7 @@ export default function (options) {
     $('a[target!="_blank"]').each(function() {
       if (!$(this).data('registeredTransitionLink')) {
         $(this).data('registeredTransitionLink', 1);
-        if ($(this).attr('href') && $(this).attr('href').substr(0,4) == 'http' && $(this).attr('href').indexOf(window.location.hostname) === -1) {
+        if ($(this).attr('href') && $(this).attr('href').substr(0, 4) == 'http' && $(this).attr('href').indexOf(window.location.hostname) === -1) {
           $(this).attr('target', '_blank');
         }
         $(this).on('click', function(e) {
@@ -189,6 +190,9 @@ export default function (options) {
             let ext = link.substr(link.lastIndexOf('.') + 1);
             if (ext) {
               if (['pdf', 'jpg', 'gif', 'png', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'txt', 'xml'].indexOf(ext) !== -1) { return true; }
+            }
+            if (obj.options.on.linkClicked != undefined) {
+              obj.options.on.linkClicked($(this))
             }
             obj.getPage(link);
             return false;
