@@ -86,8 +86,10 @@ $.fn.TabSet = function() {
     /* Hash navigation system */
     if (window.location.hash) {
       let target = tabset.find('#tab-' + window.location.hash.replace('#', ''))
-      target.click()
-      $('body, html').scrollTo(target.offset().top, 0, 0)
+      if (target.length) {
+        target.click()
+        $('body, html').scrollTo(target.offset().top, 0, 0)
+      }
     }
     if ('history' in window) {
       $(window).on('popstate', function() {
