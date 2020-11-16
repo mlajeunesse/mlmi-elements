@@ -7,8 +7,6 @@ export default function(element, swiper_options, options) {
   let self = $(element)
   self.mobile = new Mobile()
   self.swiper = undefined
-  self.wrapper = self.find('.swiper-wrapper')
-  self.slides = self.find('.swiper-slide')
   self.options = $.extend(true, {
     mobile: true,
     desktop: true,
@@ -20,9 +18,14 @@ export default function(element, swiper_options, options) {
       wrapperClass: 'slides-group',
     },
     forceRebuild: false,
+    onBeforeInit: undefined,
     onInit: undefined,
     onKill: undefined,
+    wrapperClass: 'swiper-wrapper',
+    slideClass: 'swiper-slide',
   }, options)
+  self.wrapper = self.find('.' + self.options.wrapperClass)
+  self.slides = self.find('.' + self.options.slideClass)
 
   swiper_options = $.extend({
     threshold: 15,
@@ -30,6 +33,9 @@ export default function(element, swiper_options, options) {
   }, swiper_options)
 
   self.initialize = function() {
+    if (self.options.onBeforeInit != undefined) {
+      self.options.onBeforeInit(self)
+    }
     self.wrapper.addClass('swiper-wrapper')
     self.slides.addClass('swiper-slide')
     if (self.options.groupItems && self.getSlidesPerGroup()) {
@@ -55,7 +61,7 @@ export default function(element, swiper_options, options) {
       self.wrapper.removeClass('swiper-wrapper')
     }
     if (self.slides.length) {
-      self.slides.removeClass('swiper-slide')
+      self.slides.removeClass('swiper-slide swiper-slide-duplicate-prev swiper-slide-duplicate-next swiper-slide-duplicate-active')
     }
     if (self.swiper != undefined) {
       self.swiper.destroy()
