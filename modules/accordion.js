@@ -8,7 +8,7 @@ export default {
       let accordion = $(this)
       accordion.accordion({
         buttonsGeneratedContent: 'html',
-        multiselectable: $(this).data('multiselectable'),
+        multiselectable: $(this).data('multiselectable') ? true : false,
       })
       accordion.find('.accordion__header').on('click', function() {
         accordion.find('.accordion__panel').each(function() {
