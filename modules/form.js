@@ -74,6 +74,9 @@ $.fn.Form = function(obj) {
       cache: false,
       success: self.handle_response,
     })
+    if (obj.options.blocked_class) {
+      self.addClass(obj.options.blocked_class)
+    }
     if (obj.options.onSubmit != undefined) {
       obj.options.onSubmit()
     }
@@ -113,6 +116,11 @@ $.fn.Form = function(obj) {
           scrollTop: windowTarget + 'px',
         }, 450)
       }
+    }
+    if (obj.options.blocked_class) {
+      requestAnimationFrame(function() {
+        self.removeClass(obj.options.blocked_class)
+      })
     }
     if (obj.options.onError != undefined) {
       obj.options.onError(response)
@@ -190,6 +198,7 @@ export default function (selector, options) {
     fields_selector: ':input',
     auto_scroll: true,
     auto_scroll_offset: 30,
+    blocked_class: false,
     floating_labels: false,
     select_element: true,
     date_picker: false,

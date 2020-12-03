@@ -180,6 +180,17 @@ $checkbox-focus-selected-border: $checkbox-focus-border !default;
   }
 }
 
+@mixin floating-label {
+  user-select: none;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: $input-padding;
+  border: $input-border;
+  border-color: transparent;
+}
+
 .field {
   display: flex;
   position: relative;
