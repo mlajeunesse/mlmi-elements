@@ -59,6 +59,9 @@ $.fn.Form = function(obj) {
     self.el.fields.addClass('field--disabled')
     self.el.submit.prop('disabled', true)
     self.el.inputs.prop('disabled', true)
+    if (obj.options.blocked_class) {
+      self.addClass(obj.options.blocked_class)
+    }
     self.addClass('--submitting')
     $('.field--invalid').removeClass('field--invalid')
     $('.field-error, .form-error').slideUp(180, function() {
@@ -74,9 +77,6 @@ $.fn.Form = function(obj) {
       cache: false,
       success: self.handle_response,
     })
-    if (obj.options.blocked_class) {
-      self.addClass(obj.options.blocked_class)
-    }
     if (obj.options.onSubmit != undefined) {
       obj.options.onSubmit()
     }
@@ -117,11 +117,6 @@ $.fn.Form = function(obj) {
         }, 450)
       }
     }
-    if (obj.options.blocked_class) {
-      requestAnimationFrame(function() {
-        self.removeClass(obj.options.blocked_class)
-      })
-    }
     if (obj.options.onError != undefined) {
       obj.options.onError(response)
     }
@@ -131,6 +126,9 @@ $.fn.Form = function(obj) {
     self.el.fields.removeClass('field--disabled')
     self.el.inputs.prop('disabled', false)
     self.el.submit.prop('disabled', false)
+    if (obj.options.blocked_class) {
+      self.removeClass(obj.options.blocked_class)
+    }
   }
 
   return function() {
