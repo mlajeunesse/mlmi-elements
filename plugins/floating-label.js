@@ -3,6 +3,9 @@
 */
 $.fn.FloatingLabel = function() {
   let self = this
+  if (self.data('floatingLabel')) {
+    return self.data('floatingLabel')
+  }
   self.label = self.find('.field__label')
   self.field = self.find('.field__input')
   self.is_empty = self.field.val() == ''
@@ -31,6 +34,7 @@ $.fn.FloatingLabel = function() {
     self.field.on('blur', self.blurred)
     $(window).on('load', self.check)
     self.check()
+    self.data('floatingLabel', self)
     return self
   }()
 }

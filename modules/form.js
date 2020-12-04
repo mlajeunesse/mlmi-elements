@@ -147,8 +147,12 @@ $.fn.Form = function(obj) {
     if (obj.options.use_ajax) {
       self.on('submit', self.handle_submit)
     }
-    if (obj.options.floating_labels) {
+    if (obj.options.floating_labels === true) {
       self.find('.field').each(function() {
+        $(this).FloatingLabel()
+      })
+    } else if (obj.options.floating_labels) {
+      self.find(obj.options.floating_labels).each(function() {
         $(this).FloatingLabel()
       })
     }
