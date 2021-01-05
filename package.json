@@ -1,6 +1,6 @@
 {
   "name": "mlmi-elements",
-  "version": "0.5.41",
+  "version": "0.5.42",
   "description": "Éléments MLMI",
   "author": "Mathieu Lajeunesse médias interactifs",
   "private": true,
@@ -11,6 +11,6 @@
     "jquery-datepicker": "^1.12.3",
     "jquery-ui": "^1.12",
     "jquery-ui-touch-punch": "^0.2",
-    "swiper": "^6.3.5"
+    "swiper": "^6.4.5"
   }
 }

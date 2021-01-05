@@ -39,8 +39,8 @@ export default function(element, swiper_options, options) {
     self.wrapper.addClass('swiper-wrapper')
     self.slides.addClass('swiper-slide')
     if (self.options.groupItems && self.getSlidesPerGroup()) {
-      while (self.find('.swiper-wrapper > .swiper-slide').length > 0) {
-        self.find('.swiper-wrapper > .swiper-slide:lt(' + self.getSlidesPerGroup() + ')').removeClass('swiper-slide').wrapAll($('<div class="' + self.options.groupItems.wrapperClass + '">'))
+      while (self.find('.' + self.options.wrapperClass + ' > .' + self.options.slideClass).length > 0) {
+        self.find('.' + self.options.wrapperClass + ' > .' + self.options.slideClass + ':lt(' + self.getSlidesPerGroup() + ')').removeClass('swiper-slide').wrapAll($('<div class="' + self.options.groupItems.wrapperClass + '">'))
       }
       $('.' + self.options.groupItems.wrapperClass).addClass('swiper-slide')
     }
