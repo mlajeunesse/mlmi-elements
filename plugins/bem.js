@@ -27,6 +27,12 @@ $.fn.BlockElement = function(_block_class)
 		return _el;
 	};
 
+  /* Has a modifier */
+  _el.hasModifier = function(_modifier_class)
+	{
+		return _el.hasClass(_el.block_class + "--" + _modifier_class);
+	};
+
 	/* Remove a modifier */
 	_el.removeModifier = function(_modifier_class)
 	{
