@@ -40,6 +40,7 @@ $checkbox-focus-background: $input-background-active !default;
 $checkbox-focus-border: $checkbox-border !default;
 $checkbox-focus-selected-background: $input-background-active !default;
 $checkbox-focus-selected-border: $checkbox-focus-border !default;
+$checkbox-dot-background: $input-background !default;
 
 @mixin input-reset() {
   appearance: none;
@@ -137,7 +138,7 @@ $checkbox-focus-selected-border: $checkbox-focus-border !default;
       display: none;
       width: $checkbox-dot-width;
       height: $checkbox-dot-width;
-      background: $input-background;
+      background: $checkbox-dot-background;
       position: absolute;
       top: 50%;
       left: 50%;
@@ -168,7 +169,8 @@ $checkbox-focus-selected-border: $checkbox-focus-border !default;
     }
   }
 
-  &:focus:checked {
+  &:focus:checked,
+  &:active:checked {
     + span {
       border: $checkbox-focus-selected-border;
       background: $checkbox-focus-selected-background;
