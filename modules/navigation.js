@@ -205,6 +205,9 @@ export default function (options) {
           if ($(this).data('preventTransition') === 1) {
             return true
           }
+          if ($(this).hasClass('prevent-transition')) {
+            return true
+          }
           if (e.originalEvent != undefined && (e.originalEvent.cmdKey || e.originalEvent.metaKey)) { return true }
           let link = $(this).attr('href')
           if (link) {
