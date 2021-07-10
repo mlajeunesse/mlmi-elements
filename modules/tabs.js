@@ -1,24 +1,31 @@
-import { TRANSITION_END } from '../utils'
+import { TRANSITION_END, IS_ANDROID, IS_IOS } from '../utils'
 import '../plugins/scroll-to'
 
 $.fn.Tab = function(tabset) {
   let tab = this
+  if (tab.data('tab')) {
+    return tab.data('tab')
+  }
   tab.name = tab.attr('id').replace('tab-', '')
   tab.panel = tabset.find('.tabs__panel#panel-' + tab.name)
 
-  tab.clicked = function() {
+  tab.clicked = function(e) {
     tabset.select(tab)
   }
 
   return function() {
     tab.on('click', tab.clicked)
     tab.panel.on('focus', tab.clicked)
+    tab.data('tab', tab)
     return tab
   }()
 }
 
 $.fn.TabSet = function() {
   let tabset = this
+  if (tabset.data('tabset')) {
+    return tabset.data('tabset')
+  }
   tabset.tabs = []
   tabset.current = undefined
   tabset.wrapper = tabset.find('.tabs__panels-list')
@@ -56,6 +63,7 @@ $.fn.TabSet = function() {
 
       /* Display new current tab */
       _tab.attr('aria-selected', 'true')
+      tabset.trigger('tab_changed', [tabset.current])
       tabset.current = _tab
       tabset.timeout = setTimeout(function() {
         tabset.current.panel.hide().prop('hidden', false).stop(true).fadeIn(450, 'swing', function() {
@@ -102,7 +110,12 @@ $.fn.TabSet = function() {
     }
 
     /* Stop animations on resize */
-    $(window).on('resize orientationchange', tabset.stopAnimations)
+    if (IS_ANDROID || IS_IOS) {
+      $(window).on('orientationchange', tabset.stopAnimations)
+    } else {
+      $(window).on('resize orientationchange', tabset.stopAnimations)
+    }
+    tabset.data('tabset', tabset)
     return tabset
   }()
 }
